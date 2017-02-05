@@ -3,7 +3,9 @@ package de.jbdb;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class SqlParserTest {
 	
@@ -20,7 +22,41 @@ public class SqlParserTest {
 	public void before() {
 		classUnderTest = new Sql2JSON();
 	}
+	
+	@Test
+	public void testConvertNull() throws Exception {
+		String json = classUnderTest.parseSQL(null);
+		
+		assertThat(json).isEmpty();
+	}
+	
+	@Test
+	public void testConvertEmptyString() throws Exception {
+		String json = classUnderTest.parseSQL("");
+		
+		assertThat(json).isEmpty();		
+	}
+	
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
+	
+	@Test
+	public void testConvertNonInsertStatement() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		
+		classUnderTest.parseSQL("DROP TABLE test;");
+	}
 
+	@Test
+	public void testConvertSimpleInsert() throws Exception {
+		
+		String json = classUnderTest.parseSQL("INSERT INTO `testTable` (`testAttribute`) VALUES ('testValue');");
+		
+		assertThat(json).isNotNull();
+		assertThat(json).isNotEmpty();
+		assertThat(json).isEqualTo("{\"testTable\":{\"testAttribute\":\"testValue\"}}");
+	}
+	
 	@Test
 	public void testConvertPostInsertToJSON() throws Exception {
 		assertThat(classUnderTest).isNotNull();

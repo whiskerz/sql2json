@@ -6,16 +6,23 @@ import net.sf.jsqlparser.statement.Statement;
 
 public class Sql2JSON {
 
-	public String parseSQL(String forumPostSql) throws JSQLParserException {
+	public String parseSQL(String sqlStatement) throws JSQLParserException {
 		
-		Statement statement = CCJSqlParserUtil.parse(forumPostSql);
+		if (sqlStatement == null) {
+			return "";
+		}
 		
-		SqlValues valueList = new SqlValues(columns);
-		valueList.addRow(row);
+		if (sqlStatement == "") {
+			return "";
+		}
 		
-		JSONConverter converter = new JSONConverter(valueList);
+		Statement statement = CCJSqlParserUtil.parse(sqlStatement);
 		
-		return converter.getJSON();
+		Sql2JSONStatementParser statementVisitor = new Sql2JSONStatementParser();
+		
+		statement.accept(statementVisitor);
+		
+		return new JSONObject2StringConverter().convertJSONObject(statementVisitor.returnResult());		
 	}
 
 }
