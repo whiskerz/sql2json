@@ -31,16 +31,16 @@ import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 
-public class Sql2JSONStatementParserTest {
+public class Sql2JSONStatementVisitorTest {
 
 	@Rule
 	public final ExpectedException expectedException = ExpectedException.none();
 
-	private Sql2JSONStatementParser classUnderTest;
+	private Sql2JSONStatementVisitor classUnderTest;
 	
 	@Before
 	public void before() {
-		classUnderTest = new Sql2JSONStatementParser();
+		classUnderTest = new Sql2JSONStatementVisitor();
 	}
 	
 	@Test

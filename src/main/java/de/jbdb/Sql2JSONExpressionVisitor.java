@@ -49,7 +49,7 @@ import net.sf.jsqlparser.expression.operators.relational.RegExpMatchOperator;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.SubSelect;
 
-public class Sql2JSONInsertParser implements ExpressionVisitor {
+public class Sql2JSONExpressionVisitor implements ExpressionVisitor {
 
 	@Override
 	public void visit(NullValue nullValue) {

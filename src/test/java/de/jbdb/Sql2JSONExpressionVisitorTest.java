@@ -52,13 +52,13 @@ import net.sf.jsqlparser.expression.operators.relational.RegExpMatchOperatorType
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.SubSelect;
 
-public class Sql2JSONInsertParserTest {
+public class Sql2JSONExpressionVisitorTest {
 
-	private Sql2JSONInsertParser classUnderTest;
+	private Sql2JSONExpressionVisitor classUnderTest;
 	
 	@Before
 	public void before() {
-		classUnderTest = new Sql2JSONInsertParser();
+		classUnderTest = new Sql2JSONExpressionVisitor();
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

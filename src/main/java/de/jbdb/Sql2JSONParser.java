@@ -4,7 +4,7 @@ import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 
-public class Sql2JSON {
+public class Sql2JSONParser {
 
 	public String parseSQL(String sqlStatement) throws JSQLParserException {
 		
@@ -18,7 +18,7 @@ public class Sql2JSON {
 		
 		Statement statement = CCJSqlParserUtil.parse(sqlStatement);
 		
-		Sql2JSONStatementParser statementVisitor = new Sql2JSONStatementParser();
+		Sql2JSONStatementVisitor statementVisitor = new Sql2JSONStatementVisitor();
 		
 		statement.accept(statementVisitor);
 		

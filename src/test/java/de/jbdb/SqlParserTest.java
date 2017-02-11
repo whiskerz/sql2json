@@ -16,11 +16,11 @@ public class SqlParserTest {
 			"(5897, 252, 1089894102, 142, '[topic_titel]Re: Anmeldung von Whiskerz[/topic_titel]Hm gehört überarbeitet die Software ^.^ ich werd mich mal melden wenn mir *wirklich* langweilig ist ... interessiert mich ohnehin so ein Forumsteil ... auf was für nem Server läuft das eigentlich? per dyndns oder so? geforwarded auf Deinen stets laufenden Heimrechner oder wie? d.h. verfügbarkeit nur solange Stromrechnung bezahlt ^.^?\r\n\r\nIm übrigen : mach nen \\\"Home\\\" Button irgendwo rechts hin, damit man auch wieder zurück auf die Startseite kommt egal wo man ist (hatte grad nen Fehler und hin in der Luft)\r\n\r\nUnd mach diese Standardnachricht raus, die da immer beim Anmelden gepostet wird, es reicht zu wissen \\\"... ist jetzt da\\\" und nicht dieses ganze blah-sülz was man da hätte schreiben sollen', '', 0),"+
 			"(5898, 252, 1089894179, 142, '[topic_titel]Re: Re: Anmeldung von Whiskerz[/topic_titel]achja und wo ich schon dabei sind : mach nen Link zu \\\"howtos\\\" um die Funktionen des Forums zu erklären, angefangen von \\\"anmelden\\\", \\\"account verwaltung\\\" , \\\"verfassen von nachrichten\\\" usw. - das wäre ganz praktisch ^.^', '', 0)";
 	
-	private Sql2JSON classUnderTest;
+	private Sql2JSONParser classUnderTest;
 	
 	@Before
 	public void before() {
-		classUnderTest = new Sql2JSON();
+		classUnderTest = new Sql2JSONParser();
 	}
 	
 	@Test

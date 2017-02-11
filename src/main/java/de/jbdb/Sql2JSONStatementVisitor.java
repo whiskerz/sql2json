@@ -23,7 +23,7 @@ import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 
-public class Sql2JSONStatementParser implements StatementVisitor {
+public class Sql2JSONStatementVisitor implements StatementVisitor {
 	
 	private JsonObjectBuilder resultBuilder;
 
@@ -47,7 +47,7 @@ public class Sql2JSONStatementParser implements StatementVisitor {
 		
 		List<Column> columns = insert.getColumns();
 		if (columns != null && isNotEmpty(columns)) {
-			
+//			Sql2JSON
 		}
 	}
 
