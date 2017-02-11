@@ -54,7 +54,7 @@ public class SqlParserTest {
 		
 		assertThat(json).isNotNull();
 		assertThat(json).isNotEmpty();
-		assertThat(json).isEqualTo("{\"testTable\":{\"testAttribute\":\"testValue\"}}");
+		assertThat(json).isEqualTo("{\"testTable\":[{\"testAttribute\":\"testValue\"}]}");
 	}
 	
 	@Test

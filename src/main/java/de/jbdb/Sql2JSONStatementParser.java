@@ -1,8 +1,14 @@
 package de.jbdb;
 
-import javax.json.Json;
-import javax.json.JsonObject;
+import java.util.List;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
+import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.StatementVisitor;
 import net.sf.jsqlparser.statement.Statements;
 import net.sf.jsqlparser.statement.alter.Alter;
@@ -19,21 +25,41 @@ import net.sf.jsqlparser.statement.update.Update;
 
 public class Sql2JSONStatementParser implements StatementVisitor {
 	
-	private JsonObject result;
+	private JsonObjectBuilder resultBuilder;
 
 	public void visit(Insert insert) {
 		if (insert == null) {
-			result = null;
-			return;
+			throwIllegalArgument("Insert statement parameter may not be null.");
 		}
 		
-		new Sql2JSONInsertParser();
+		resultBuilder = Json.createObjectBuilder();
 		
-		result = Json.createObjectBuilder().build();
+		Table table = insert.getTable();
+		if (table == null) {
+			throwIllegalArgument("Table is required since the table name defines the top level json name to be used.");
+		}
+		
+		if (table != null) {
+			String tableName = table.getName();
+			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+			resultBuilder.add(tableName, arrayBuilder);
+		}
+		
+		List<Column> columns = insert.getColumns();
+		if (columns != null && isNotEmpty(columns)) {
+			
+		}
+	}
+
+	private boolean isNotEmpty(List<Column> columns) {
+		return !columns.isEmpty();
 	}
 
 	public JsonObject returnResult() {
-		return result;
+		if (resultBuilder == null) {
+			return null;
+		}
+		return resultBuilder.build();
 	}
 	
 	public void visit(Select select) {
@@ -81,7 +107,11 @@ public class Sql2JSONStatementParser implements StatementVisitor {
 	}
 
 	private void throwIllegalArgument() {
-		throw new IllegalArgumentException("Only accepting INSERT statements.");
+		throwIllegalArgument("Only accepting INSERT statements.");
+	}
+
+	private void throwIllegalArgument(String message) {
+		throw new IllegalArgumentException(message);
 	}
 
 }
