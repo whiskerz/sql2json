@@ -7,7 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class SqlParserTest {
+public class Sql2JSONParserTest {
 	
 	private String forumPostSql = 
 			"INSERT INTO `abforum_posts` (`post_id`, `topic_id`, `post_datum`, `post_autor`, `post_text`, `post_ip`, `post_Edit`) VALUES" + 

@@ -7,6 +7,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
+import net.sf.jsqlparser.expression.operators.relational.ItemsList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.StatementVisitor;
@@ -39,20 +40,22 @@ public class Sql2JSONStatementVisitor implements StatementVisitor {
 			throwIllegalArgument("Table is required since the table name defines the top level json name to be used.");
 		}
 		
-		if (table != null) {
-			String tableName = table.getName();
-			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-			resultBuilder.add(tableName, arrayBuilder);
-		}
+		String tableName = table.getName();
+		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+		resultBuilder.add(tableName, arrayBuilder);
 		
 		List<Column> columns = insert.getColumns();
-		if (columns != null && isNotEmpty(columns)) {
-//			Sql2JSON
+		if (columns == null || columns.isEmpty()) {
+			return;
 		}
-	}
-
-	private boolean isNotEmpty(List<Column> columns) {
-		return !columns.isEmpty();
+		
+		ItemsList itemsList = insert.getItemsList();
+		if (itemsList == null) {
+			return;
+		}
+		
+		Sql2JSONItemsListParser insertParser = new Sql2JSONItemsListParser(columns);
+		insertParser.parse(itemsList);
 	}
 
 	public JsonObject returnResult() {
@@ -106,6 +109,8 @@ public class Sql2JSONStatementVisitor implements StatementVisitor {
 		throwIllegalArgument();
 	}
 
+	private IllegalVisitorArgumentException exception;
+	
 	private void throwIllegalArgument() {
 		throwIllegalArgument("Only accepting INSERT statements.");
 	}
