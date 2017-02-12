@@ -2,6 +2,8 @@ package de.jbdb;
 
 import static de.jbdb.IllegalVisitorArgumentException.throwIllegalArgument;
 
+import javax.json.JsonObjectBuilder;
+
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnalyticExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
@@ -52,6 +54,21 @@ import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.SubSelect;
 
 public class Sql2JSONExpressionVisitor implements ExpressionVisitor {
+
+	private JsonObjectBuilder jsonObjectBuilder;
+	
+	private String columnName;
+
+	public Sql2JSONExpressionVisitor(JsonObjectBuilder jsonObjectBuilder) {
+		if (jsonObjectBuilder == null) {
+			throwIllegalArgument("Need the object builder to put results somewhere. Please supply one.");
+		}
+		this.jsonObjectBuilder = jsonObjectBuilder;
+	}
+	
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
 
 	@Override
 	public void visit(NullValue nullValue) {
@@ -110,7 +127,12 @@ public class Sql2JSONExpressionVisitor implements ExpressionVisitor {
 
 	@Override
 	public void visit(StringValue stringValue) {
-		throwIllegalArgument();
+		if (columnName == null) {
+			throwIllegalArgument("You need to set the column name before calling the accept method on your expression. Sorry visitors are kinda stupid that way or I have not found a better way to deal with them.");
+		}
+		
+		jsonObjectBuilder.add(columnName, stringValue.getValue());
+		columnName = null;
 	}
 
 	@Override
