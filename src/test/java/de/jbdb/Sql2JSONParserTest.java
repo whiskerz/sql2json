@@ -49,6 +49,16 @@ public class Sql2JSONParserTest {
 	@Test
 	public void testConvertSimpleInsert() throws Exception {
 
+		String json = classUnderTest.parseSQL("INSERT INTO testTable (testAttribute) VALUES ('testValue');");
+
+		assertThat(json).isNotNull();
+		assertThat(json).isNotEmpty();
+		assertThat(json).isEqualTo("{\"testTable\":[{\"testAttribute\":\"testValue\"}]}");
+	}
+
+	@Test
+	public void testConvertSimpleInsert_RemoveAccentuatedQuotes() throws Exception {
+
 		String json = classUnderTest.parseSQL("INSERT INTO `testTable` (`testAttribute`) VALUES ('testValue');");
 
 		assertThat(json).isNotNull();

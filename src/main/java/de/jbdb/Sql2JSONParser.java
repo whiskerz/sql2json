@@ -7,22 +7,28 @@ import net.sf.jsqlparser.statement.Statement;
 public class Sql2JSONParser {
 
 	public String parseSQL(String sqlStatement) throws JSQLParserException {
-		
+
 		if (sqlStatement == null) {
 			return "";
 		}
-		
+
 		if (sqlStatement == "") {
 			return "";
 		}
-		
-		Statement statement = CCJSqlParserUtil.parse(sqlStatement);
-		
+
+		String parseableStatemant = removeAccentuatedQuotationMarks(sqlStatement);
+
+		Statement statement = CCJSqlParserUtil.parse(parseableStatemant);
+
 		Sql2JSONStatementVisitor statementVisitor = new Sql2JSONStatementVisitor();
-		
+
 		statement.accept(statementVisitor);
-		
-		return new JSONObject2StringConverter().convertJSONObject(statementVisitor.returnResult());		
+
+		return new JSONObject2StringConverter().convertJSONObject(statementVisitor.returnResult());
+	}
+
+	private String removeAccentuatedQuotationMarks(String sqlStatement) {
+		return sqlStatement.replace("`", "");
 	}
 
 }
