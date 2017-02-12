@@ -102,7 +102,9 @@ public class Sql2JSONExpressionVisitor implements ExpressionVisitor {
 
 	@Override
 	public void visit(LongValue longValue) {
-		throwIllegalArgument("Only accepting String so far.");
+		checkColumnName();
+
+		jsonObjectBuilder.add(columnName, longValue.getStringValue());
 	}
 
 	@Override
@@ -127,13 +129,17 @@ public class Sql2JSONExpressionVisitor implements ExpressionVisitor {
 
 	@Override
 	public void visit(StringValue stringValue) {
+		checkColumnName();
+
+		jsonObjectBuilder.add(columnName, stringValue.getValue());
+		columnName = null;
+	}
+
+	private void checkColumnName() {
 		if (columnName == null) {
 			throwIllegalArgument(
 					"You need to set the column name before calling the accept method on your expression. Sorry visitors are kinda stupid that way or I have not found a better way to deal with them.");
 		}
-
-		jsonObjectBuilder.add(columnName, stringValue.getValue());
-		columnName = null;
 	}
 
 	@Override

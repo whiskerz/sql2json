@@ -104,9 +104,13 @@ public class Sql2JSONExpressionVisitorTest {
 		classUnderTest.visit(new DoubleValue("1.0"));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testVisitLongValue() throws Exception {
-		classUnderTest.visit(new LongValue("1"));
+		classUnderTest.setColumnName("testColumn");
+
+		classUnderTest.visit(new LongValue("123456789"));
+
+		assertThat(resultObjectBuilder.build().toString()).isEqualTo("{\"testColumn\":\"123456789\"}");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
