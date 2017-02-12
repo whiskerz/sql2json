@@ -1,5 +1,7 @@
 package de.jbdb;
 
+import static de.jbdb.IllegalVisitorArgumentException.throwIllegalArgument;
+
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnalyticExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
@@ -284,10 +286,6 @@ public class Sql2JSONExpressionVisitor implements ExpressionVisitor {
 	@Override
 	public void visit(RegExpMatchOperator rexpr) {
 		throwIllegalArgument();
-	}
-
-	private void throwIllegalArgument() {
-		throw new IllegalArgumentException("Only accepting INSERT statements.");
 	}
 
 }

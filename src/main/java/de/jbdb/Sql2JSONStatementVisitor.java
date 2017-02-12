@@ -1,5 +1,7 @@
 package de.jbdb;
 
+import static de.jbdb.IllegalVisitorArgumentException.throwIllegalArgument;
+
 import java.util.List;
 
 import javax.json.Json;
@@ -107,16 +109,6 @@ public class Sql2JSONStatementVisitor implements StatementVisitor {
 
 	public void visit(Statements stmts) {
 		throwIllegalArgument();
-	}
-
-	private IllegalVisitorArgumentException exception;
-	
-	private void throwIllegalArgument() {
-		throwIllegalArgument("Only accepting INSERT statements.");
-	}
-
-	private void throwIllegalArgument(String message) {
-		throw new IllegalArgumentException(message);
 	}
 
 }
