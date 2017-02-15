@@ -1,6 +1,6 @@
-package de.jbdb;
+package de.jbdb.sql2json;
 
-import static de.jbdb.Sql2JSONTestObjects.STRING_VALUE_01;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.STRING_VALUE_01;
 import static org.fest.assertions.Assertions.assertThat;
 
 import javax.json.Json;

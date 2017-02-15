@@ -1,4 +1,4 @@
-package de.jbdb;
+package de.jbdb.sql2json;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import de.jbdb.sql2json.Sql2JSONItemsListParser;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.MultiExpressionList;

@@ -1,4 +1,4 @@
-package de.jbdb;
+package de.jbdb.sql2json;
 
 public class IllegalVisitorArgumentException extends IllegalArgumentException {
 

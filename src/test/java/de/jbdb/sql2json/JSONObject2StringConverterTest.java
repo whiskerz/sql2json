@@ -1,4 +1,4 @@
-package de.jbdb;
+package de.jbdb.sql2json;
 
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -9,6 +9,8 @@ import javax.json.JsonObjectBuilder;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.jbdb.sql2json.JSONObject2StringConverter;
 
 public class JSONObject2StringConverterTest {
 

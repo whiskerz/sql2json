@@ -1,4 +1,4 @@
-package de.jbdb;
+package de.jbdb.sql2json;
 
 import net.sf.jsqlparser.expression.StringValue;
 

@@ -1,4 +1,4 @@
-package de.jbdb;
+package de.jbdb.sql2json;
 
 import java.io.IOException;
 import java.nio.file.Files;
