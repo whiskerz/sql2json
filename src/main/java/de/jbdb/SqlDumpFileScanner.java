@@ -10,12 +10,18 @@ import java.util.stream.Stream;
 
 public class SqlDumpFileScanner {
 	public enum State {
-		NO_INSERT
+		NO_INSERT, INSERT
 
 	}
 
+	private static final String INSERT_START = "INSERT";
+
+	private static final String INSERT_END = ";";
+
 	private State state = State.NO_INSERT;
-	private ArrayList<String> insertList = new ArrayList<String>();;
+	private ArrayList<String> insertList = new ArrayList<String>();
+
+	private StringBuffer currentInsert;;
 
 	public List<String> scanFile(String filePath) {
 		Consumer<String> scan = (String line) -> scanLine(line);
@@ -31,9 +37,22 @@ public class SqlDumpFileScanner {
 		return insertList;
 	}
 
-	private Consumer<? super String> scanLine(String line) {
-		// TODO Auto-generated method stub
-		return null;
+	private void scanLine(String line) {
+		if (state == State.NO_INSERT) {
+			if (line.startsWith(INSERT_START)) {
+				state = State.INSERT;
+				currentInsert = new StringBuffer();
+			}
+		}
+
+		if (state == State.INSERT) {
+			currentInsert.append(line);
+
+			if (line.endsWith(INSERT_END)) {
+				state = State.NO_INSERT;
+			}
+		}
+
 	}
 
 }
