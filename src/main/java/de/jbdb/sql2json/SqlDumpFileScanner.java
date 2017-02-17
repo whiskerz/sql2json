@@ -1,8 +1,6 @@
 package de.jbdb.sql2json;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,13 +12,12 @@ public class SqlDumpFileScanner {
 	}
 
 	private static final String INSERT_START = "INSERT";
-
 	private static final String INSERT_END = ";";
 
+	private FileHandler fileHandler;
+
 	private State state = State.NO_INSERT;
-
 	private StringBuffer currentInsert;
-
 	private HashMap<String, Insert> insertMap;
 
 	public Collection<Insert> scanDirectory(String[] directoryPath) {
@@ -29,8 +26,8 @@ public class SqlDumpFileScanner {
 		return insertMap.values();
 	}
 
-	public void scanFile(String filePath) {
-		try (Stream<String> stream = Files.lines(Paths.get(filePath))) {
+	private void scanFile(String filePath) {
+		try (Stream<String> stream = fileHandler.lines(fileHandler.get(filePath))) {
 
 			stream.forEach(this::scanLine);
 
