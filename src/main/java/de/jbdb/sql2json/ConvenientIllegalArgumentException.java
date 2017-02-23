@@ -1,10 +1,10 @@
 package de.jbdb.sql2json;
 
-public class IllegalVisitorArgumentException extends IllegalArgumentException {
+public class ConvenientIllegalArgumentException extends IllegalArgumentException {
 
 	private static final long serialVersionUID = 5381716642803330491L;
 
-	public static void throwIllegalArgument() {
+	public static void throwIllegalArgumentForNonInsert() {
 		throwIllegalArgument("Only accepting INSERT statements.");
 	}
 

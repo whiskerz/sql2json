@@ -1,6 +1,6 @@
 package de.jbdb.sql2json;
 
-import static de.jbdb.sql2json.IllegalVisitorArgumentException.throwIllegalArgument;
+import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalArgument;
 
 import java.util.List;
 

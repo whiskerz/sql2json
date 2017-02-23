@@ -1,6 +1,7 @@
 package de.jbdb.sql2json;
 
-import static de.jbdb.sql2json.IllegalVisitorArgumentException.throwIllegalArgument;
+import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalArgument;
+import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalArgumentForNonInsert;
 
 import java.util.List;
 
@@ -72,57 +73,57 @@ public class Sql2JSONStatementVisitor implements StatementVisitor {
 
 	@Override
 	public void visit(Select select) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(Delete delete) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(Update update) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(Replace replace) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(Drop drop) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(Truncate truncate) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(CreateIndex createIndex) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(CreateTable createTable) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(CreateView createView) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(Alter alter) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 	@Override
 	public void visit(Statements stmts) {
-		throwIllegalArgument();
+		throwIllegalArgumentForNonInsert();
 	}
 
 }

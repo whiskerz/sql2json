@@ -19,4 +19,8 @@ public class Insert {
 		insertValues.addAll(otherInsert.insertValues);
 	}
 
+	public List<String> getColumnNames() {
+		return columnNames;
+	}
+
 }

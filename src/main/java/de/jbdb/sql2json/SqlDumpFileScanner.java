@@ -1,5 +1,7 @@
 package de.jbdb.sql2json;
 
+import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalArgument;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,16 +13,31 @@ public class SqlDumpFileScanner {
 		NO_INSERT, INSERT
 	}
 
+	// CONSTANTS
 	private static final String INSERT_START = "INSERT";
 	private static final String INSERT_END = ";";
 
+	// SERVICES
 	private FileHandler fileHandler;
 
+	// ATTRIBUTES
 	private State state = State.NO_INSERT;
 	private StringBuffer currentInsert;
 	private HashMap<String, Insert> insertMap;
 
-	public Collection<Insert> scanDirectory(String[] directoryPath) {
+	public SqlDumpFileScanner(FileHandler fileHandler) {
+		if (fileHandler == null) {
+			throwIllegalArgument("A service for file handling is required for this scanner.");
+		}
+
+		this.fileHandler = fileHandler;
+	}
+
+	public Collection<Insert> scanDirectory(String... directoryPath) {
+		if (directoryPath == null || directoryPath.length == 0) {
+			throwIllegalArgument("Path array may not be null or empty.");
+		}
+
 		Arrays.stream(directoryPath).forEach(this::scanFile);
 
 		return insertMap.values();
@@ -37,11 +54,9 @@ public class SqlDumpFileScanner {
 	}
 
 	private void scanLine(String line) {
-		if (state == State.NO_INSERT) {
-			if (line.startsWith(INSERT_START)) {
-				state = State.INSERT;
-				currentInsert = new StringBuffer();
-			}
+		if (state == State.NO_INSERT && line.startsWith(INSERT_START)) {
+			state = State.INSERT;
+			currentInsert = new StringBuffer();
 		}
 
 		if (state == State.INSERT) {
@@ -58,7 +73,6 @@ public class SqlDumpFileScanner {
 				}
 			}
 		}
-
 	}
 
 }
