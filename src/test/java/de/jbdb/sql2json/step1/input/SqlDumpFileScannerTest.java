@@ -1,4 +1,4 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.step1.input;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -16,6 +16,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import de.jbdb.sql2json.step1.input.FileHandler;
+import de.jbdb.sql2json.step1.input.SqlDumpFileScanner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SqlDumpFileScannerTest {

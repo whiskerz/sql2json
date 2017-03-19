@@ -1,4 +1,4 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.cli;
 
 public class Sql2JSONCommandLine {
 

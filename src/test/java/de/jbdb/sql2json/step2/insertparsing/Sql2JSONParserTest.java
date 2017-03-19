@@ -1,4 +1,4 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.step2.insertparsing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -7,7 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import de.jbdb.sql2json.Sql2JSONParser;
+import de.jbdb.sql2json.step2.insertparsing.Sql2JSONParser;
 
 public class Sql2JSONParserTest {
 

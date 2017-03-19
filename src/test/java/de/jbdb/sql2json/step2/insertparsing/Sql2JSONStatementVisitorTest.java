@@ -1,4 +1,4 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.step2.insertparsing;
 
 import static de.jbdb.matcher.CaseInsensitiveSubstringMatcher.containsIgnoringCase;
 import static org.fest.assertions.Assertions.assertThat;
@@ -13,7 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import de.jbdb.sql2json.Sql2JSONStatementVisitor;
+import de.jbdb.sql2json.Sql2JSONTestObjects;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.ItemsList;
 import net.sf.jsqlparser.schema.Column;

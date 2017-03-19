@@ -1,4 +1,4 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.step2.insertparsing;
 
 import static de.jbdb.sql2json.Sql2JSONTestObjects.STRING_VALUE_01;
 import static org.fest.assertions.Assertions.assertThat;
@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import de.jbdb.sql2json.step2.insertparsing.Sql2JSONExpressionVisitor;
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnalyticExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;

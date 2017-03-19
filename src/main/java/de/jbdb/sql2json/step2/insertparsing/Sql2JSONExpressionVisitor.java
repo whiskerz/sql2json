@@ -1,4 +1,4 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.step2.insertparsing;
 
 import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalArgument;
 

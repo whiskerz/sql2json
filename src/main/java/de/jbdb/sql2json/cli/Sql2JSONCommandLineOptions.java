@@ -1,4 +1,4 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.cli;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;

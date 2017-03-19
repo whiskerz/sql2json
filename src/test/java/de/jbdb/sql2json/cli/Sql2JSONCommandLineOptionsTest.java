@@ -1,10 +1,10 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.cli;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
 
-import de.jbdb.sql2json.Sql2JSONCommandLineOptions;
+import de.jbdb.sql2json.cli.Sql2JSONCommandLineOptions;
 import joptsimple.OptionException;
 
 public class Sql2JSONCommandLineOptionsTest {

@@ -1,4 +1,4 @@
-package de.jbdb.sql2json;
+package de.jbdb.sql2json.step3.output;
 
 import java.io.StringWriter;
 
