@@ -55,12 +55,12 @@ public class SqlDumpFileScanner {
 	}
 
 	private void scanLine(String line) {
-		if (state == State.NO_INSERT && line.startsWith(INSERT_START)) {
+		if (State.NO_INSERT == state && line.startsWith(INSERT_START)) {
 			state = State.INSERT;
 			currentInsert = new StringBuffer();
 		}
 
-		if (state == State.INSERT) {
+		if (State.INSERT == state) {
 			currentInsert.append(line);
 
 			if (line.endsWith(INSERT_END)) {
