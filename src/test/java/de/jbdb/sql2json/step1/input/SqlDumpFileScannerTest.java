@@ -5,20 +5,18 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import de.jbdb.sql2json.step1.input.FileHandler;
-import de.jbdb.sql2json.step1.input.SqlDumpFileScanner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SqlDumpFileScannerTest {
@@ -28,16 +26,25 @@ public class SqlDumpFileScannerTest {
 	private static final String TEST_COLUMN = "testColumn";
 	private static final String TEST_VALUE1 = "testValue1";
 	private static final String TEST_VALUE2 = "testValue2";
-	private static final String TESTINSERT = "INSERT INTO " + TEST_TABLE + " (" + TEST_COLUMN + ") VALUES "
-			+ TEST_VALUE1 + ", " + TEST_VALUE2;
+	private static final String[] TESTINSERT = {
+			"INSERT INTO " + TEST_TABLE + " (" + TEST_COLUMN + ") VALUES ", 
+			"(" + TEST_VALUE1 + ", " + TEST_VALUE2 + ")"};
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
+	
+	@Rule
+    public TemporaryFolder testFolder = new TemporaryFolder();
 
 	@Mock
 	private FileHandler fileHandlerMock;
 
 	private SqlDumpFileScanner classUnderTest;
+
+	@Before
+	public void before() {
+		classUnderTest = new SqlDumpFileScanner(fileHandlerMock);
+	}
 
 	@Test
 	public void testCreation_ServiceMayNotBeNull() throws Exception {
@@ -48,17 +55,14 @@ public class SqlDumpFileScannerTest {
 		new SqlDumpFileScanner(null);
 	}
 
-	@Before
-	public void before() {
-		classUnderTest = new SqlDumpFileScanner(fileHandlerMock);
-	}
-
 	@Test
 	public void testScanDirectory_NullArgument() throws Exception {
 
 		expectedException.expect(IllegalArgumentException.class);
 
-		classUnderTest.scanDirectory((String) null);
+		String[] testNull = null; 
+		
+		classUnderTest.scanDirectory(testNull);
 	}
 
 	@Test
@@ -70,21 +74,41 @@ public class SqlDumpFileScannerTest {
 	}
 
 	@Test
-	public void testScanDirectory_HappyPathOneFile() throws Exception {
-
+	public void testScanDirectory_OneNullArgument() throws Exception {
+		
 		Path irrelevantPath = mock(Path.class);
 		when(fileHandlerMock.get(TESTPATH)).thenReturn(irrelevantPath);
 
 		Stream<String> fileAsStream = Stream.empty();
 		when(fileHandlerMock.lines(Mockito.any(Path.class))).thenReturn(fileAsStream);
+		
+		ScanResult directoryScan = classUnderTest.scanDirectory(new String[] {TESTPATH, null});
+		
+		assertThat(directoryScan.getResultStatus()).isEqualTo(ScanResultStatus.PARTIAL);
+		assertThat(directoryScan.getErrorMessages()).containsIgnoringCase("filename may not be null");
+	}
 
-		Collection<Insert> insertStatements = classUnderTest.scanDirectory(TESTPATH);
+	@Test
+	public void testScanDirectory_HappyPathOneFile() throws Exception {
 
-		assertThat(insertStatements).isNotNull();
-		assertThat(insertStatements).isNotEmpty();
-		assertThat(insertStatements).hasSize(1);
+		Path irrelevantPath = mock(Path.class);
+		when(fileHandlerMock.get(TESTPATH)).thenReturn(irrelevantPath);
 
-		Insert insert = insertStatements.stream().findFirst().get();
+		Stream<String> fileAsStream = Stream.of(TESTINSERT);
+		when(fileHandlerMock.lines(Mockito.any(Path.class))).thenReturn(fileAsStream);
+
+		ScanResult scanResult = classUnderTest.scanDirectory(TESTPATH);
+		
+		Map<TableName, InsertStatement> resultMap = scanResult.getAllResults();
+
+		assertThat(resultMap).isNotNull();
+		assertThat(resultMap).isNotEmpty();
+		assertThat(resultMap).hasSize(1);
+
+		TableName tableName = resultMap.keySet().stream().findFirst().get();
+		assertThat(tableName.get()).isEqualTo(TEST_TABLE);
+		
+		InsertStatement insert = resultMap.values().stream().findFirst().get();
 		assertThat(insert).isNotNull();
 		assertThat(insert.getTableName()).isEqualTo(TEST_TABLE);
 		assertThat(insert.getColumnNames()).isNotNull();

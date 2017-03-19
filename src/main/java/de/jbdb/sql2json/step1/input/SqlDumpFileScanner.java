@@ -4,8 +4,6 @@ import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalAr
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.stream.Stream;
 
 public class SqlDumpFileScanner {
@@ -23,8 +21,9 @@ public class SqlDumpFileScanner {
 	// ATTRIBUTES
 	private State state = State.NO_INSERT;
 	private StringBuffer currentInsert;
-	private HashMap<String, Insert> insertMap;
+	private ScanResult scanResult;
 
+	// CONSTRUCTOR
 	public SqlDumpFileScanner(FileHandler fileHandler) {
 		if (fileHandler == null) {
 			throwIllegalArgument("A service for file handling is required for this scanner.");
@@ -33,16 +32,18 @@ public class SqlDumpFileScanner {
 		this.fileHandler = fileHandler;
 	}
 
-	public Collection<Insert> scanDirectory(String... directoryPath) {
+	// PUBLIC API
+	public ScanResult scanDirectory(String... directoryPath) {
 		if (directoryPath == null || directoryPath.length == 0) {
 			throwIllegalArgument("Path array may not be null or empty.");
 		}
 
 		Arrays.stream(directoryPath).forEach(this::scanFile);
 
-		return insertMap.values();
+		return scanResult;
 	}
 
+	// PRIVATE METHODS
 	private void scanFile(String filePath) {
 		try (Stream<String> stream = fileHandler.lines(fileHandler.get(filePath))) {
 
@@ -64,13 +65,7 @@ public class SqlDumpFileScanner {
 
 			if (line.endsWith(INSERT_END)) {
 				state = State.NO_INSERT;
-				Insert insert = new Insert(currentInsert.toString());
-				if (insertMap.containsKey(insert.getTableName())) {
-					Insert existingInsert = insertMap.get(insert.getTableName());
-					existingInsert.mergeWith(insert);
-				} else {
-					insertMap.put(insert.getTableName(), insert);
-				}
+				scanResult.add(new InsertStatement(currentInsert.toString()));
 			}
 		}
 	}
