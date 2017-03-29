@@ -1,6 +1,9 @@
 # sql2json
 Just a small project to convert sql dumps (basically long files with INSERT statements) to a json structure. 
 
+# Todos
+Add CI integration, for example with trevis (https://travis-ci.org)
+
 # Links and References
 
 https://github.com/junit-team/junit4/wiki/Rules
