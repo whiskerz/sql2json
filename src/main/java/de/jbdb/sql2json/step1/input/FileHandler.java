@@ -8,12 +8,16 @@ import java.util.stream.Stream;
 
 public class FileHandler {
 
-	public Stream<String> lines(Path path) throws IOException {
-		return Files.lines(path);
-	}
-
 	public Path get(String first, String... more) {
 		return Paths.get(first, more);
+	}
+
+	public Stream<Path> files(Path directoryPath) throws IOException {
+		return Files.list(directoryPath);
+	}
+
+	public Stream<String> lines(Path path) throws IOException {
+		return Files.lines(path);
 	}
 
 }

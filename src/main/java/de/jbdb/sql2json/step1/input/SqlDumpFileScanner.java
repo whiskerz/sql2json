@@ -3,6 +3,8 @@ package de.jbdb.sql2json.step1.input;
 import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalArgument;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -14,6 +16,7 @@ public class SqlDumpFileScanner {
 	// CONSTANTS
 	private static final String INSERT_START = "INSERT";
 	private static final String INSERT_END = ";";
+	private static final String SQL_EXTENSION = ".sql";
 
 	// SERVICES
 	private FileHandler fileHandler;
@@ -33,23 +36,46 @@ public class SqlDumpFileScanner {
 	}
 
 	// PUBLIC API
-	public ScanResult scanDirectory(String... directoryPath) {
+	public ScanResult scanDirectories(String... directoryPath) {
 		if (directoryPath == null || directoryPath.length == 0) {
 			throwIllegalArgument("Path array may not be null or empty.");
 		}
 
-		Arrays.stream(directoryPath).forEach(this::scanFile);
+		scanResult = new ScanResult();
+		Arrays.stream(directoryPath).forEach(this::scanDirectory);
 
 		return scanResult;
 	}
 
 	// PRIVATE METHODS
-	private void scanFile(String filePath) {
-		try (Stream<String> stream = fileHandler.lines(fileHandler.get(filePath))) {
+	private void scanDirectory(String directoryPath) {
+		if (directoryPath == null || directoryPath.isEmpty()) {
+			scanResult.setResultStatus(ScanResultStatus.PARTIAL);
+			return;
+		}
+		
+		Path directory = fileHandler.get(directoryPath);
+		if (Files.notExists(directory)) {
+			scanResult.setResultStatus(ScanResultStatus.PARTIAL);
+			return;
+		}
+		
+		try {
+			fileHandler.files(directory).filter(this::exists).filter(this::isSqlFile).forEach(this::scanFile);;
+		} catch (IOException e) {
+			scanResult.setResultStatus(ScanResultStatus.PARTIAL);
+			// TODO: Real logging
+			e.printStackTrace();
+		}
+	}
+	
+	private void scanFile(Path filePath) {
+		try (Stream<String> stream = fileHandler.lines(filePath)) {
 
 			stream.forEach(this::scanLine);
 
 		} catch (IOException e) {
+			// TODO: Real logging
 			e.printStackTrace();
 		}
 	}
@@ -68,6 +94,14 @@ public class SqlDumpFileScanner {
 				scanResult.add(new InsertStatement(currentInsert.toString()));
 			}
 		}
+	}
+	
+	private boolean exists(Path filePath) {
+		return Files.exists(filePath);
+	}
+	
+	private boolean isSqlFile(Path filePath) {
+		return !Files.isDirectory(filePath) && filePath.endsWith(SQL_EXTENSION);
 	}
 
 }
