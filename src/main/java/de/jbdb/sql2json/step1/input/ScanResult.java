@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ScanResult {
 
-	private ScanResultStatus resultStatus;
+	private ScanResultStatus resultStatus = ScanResultStatus.FULL;
 	private List<String> errorMessages;
 	
 	private Map<TableName, InsertStatement> resultMap;
@@ -29,6 +29,10 @@ public class ScanResult {
 		} else {
 			resultMap.put(insert.getTableName(), insert);
 		}
+	}
+
+	public void setResultStatus(ScanResultStatus resultStatus) {
+		this.resultStatus = resultStatus;
 	}
 
 }
