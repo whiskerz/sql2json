@@ -1,7 +1,7 @@
 package de.jbdb.sql2json.step2.insertparsing;
 
 import static de.jbdb.sql2json.Sql2JSONTestObjects.STRING_VALUE_01;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;

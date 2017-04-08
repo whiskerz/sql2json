@@ -2,7 +2,7 @@ package de.jbdb.sql2json.step1.input;
 
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTINSERT;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_TABLE;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.nio.charset.Charset;

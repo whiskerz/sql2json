@@ -5,7 +5,7 @@ import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_COLUMN;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_TABLE;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_VALUE1;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_VALUE2;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 

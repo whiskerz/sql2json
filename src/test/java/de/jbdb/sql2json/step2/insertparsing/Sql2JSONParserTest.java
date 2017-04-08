@@ -1,6 +1,6 @@
 package de.jbdb.sql2json.step2.insertparsing;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Rule;

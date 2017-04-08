@@ -1,7 +1,7 @@
 package de.jbdb.sql2json.step3.output;
 
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.json.Json;
 import javax.json.JsonObject;
