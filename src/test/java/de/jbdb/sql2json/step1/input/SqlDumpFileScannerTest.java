@@ -1,13 +1,12 @@
 package de.jbdb.sql2json.step1.input;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -21,7 +20,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class SqlDumpFileScannerTest {
 
-	private static final String TESTPATH = "/src/test/path";
 	private static final String TEST_TABLE = "testTable";
 	private static final String TEST_COLUMN = "testColumn";
 	private static final String TEST_VALUE1 = "testValue1";
@@ -85,16 +83,12 @@ public class SqlDumpFileScannerTest {
 		assertThat(directoryScan.getErrorMessages()).containsIgnoringCase("path was null or empty");
 	}
 
-	// Missing Tests: FileHandler throws IOException on directory listing, on file line reading
-
 	@Test
 	public void testScanDirectories_HappyPathOneFile() throws Exception {
+		final File tempFile = tempFolder.newFile("tempFile.sql");
+		FileUtils.writeStringToFile(tempFile, String.join("\n", TESTINSERT), Charset.defaultCharset());
 
-		Path irrelevantPath = mock(Path.class);
-
-		Stream<String> fileAsStream = Stream.of(TESTINSERT);
-
-		ScanResult scanResult = classUnderTest.scanDirectories(TESTPATH);
+		ScanResult scanResult = classUnderTest.scanDirectories(tempFolder.getRoot().getAbsolutePath());
 
 		Map<TableName, InsertStatement> resultMap = scanResult.getAllResults();
 
@@ -102,8 +96,11 @@ public class SqlDumpFileScannerTest {
 		assertThat(resultMap).isNotEmpty();
 		assertThat(resultMap).hasSize(1);
 
-		TableName tableName = resultMap.keySet().stream().findFirst().get();
-		assertThat(tableName.get()).isEqualTo(TEST_TABLE);
+		Set<TableName> tableNameSet = resultMap.keySet();
+		assertThat(tableNameSet).isNotNull();
+		assertThat(tableNameSet).isNotEmpty();
+		assertThat(tableNameSet).hasSize(1);
+		assertThat(tableNameSet.toArray(new TableName[1])[0]).isEqualTo(TEST_TABLE);
 
 		InsertStatement insert = resultMap.values().stream().findFirst().get();
 		assertThat(insert).isNotNull();
@@ -111,5 +108,11 @@ public class SqlDumpFileScannerTest {
 		assertThat(insert.getColumnNames()).isNotNull();
 		assertThat(insert.getColumnNames()).hasSize(1);
 		assertThat(insert.getColumnNames().get(0)).isEqualTo(TEST_COLUMN);
+
+		List<ValueRow> rowValues = insert.getValueRows();
+		assertThat(rowValues).isNotNull();
+		assertThat(rowValues).isNotEmpty();
+		assertThat(rowValues).hasSize(2);
+		assertThat(rowValues).contains(new ValueRow(TEST_VALUE1), new ValueRow(TEST_VALUE2));
 	}
 }

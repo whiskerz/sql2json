@@ -23,4 +23,7 @@ public class InsertStatement {
 		return columnNames;
 	}
 
+	public List<ValueRow> getValueRows() {
+		return valueRows;
+	}
 }
