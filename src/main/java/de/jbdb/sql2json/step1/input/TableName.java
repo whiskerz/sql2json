@@ -5,7 +5,8 @@ public class TableName {
 	private String name;
 
 	public TableName(String name) {
-		this.name = name;
+		this.name = name.trim();
+		this.name = this.name.replaceAll("`", "");
 	}
 
 	public String get() {
