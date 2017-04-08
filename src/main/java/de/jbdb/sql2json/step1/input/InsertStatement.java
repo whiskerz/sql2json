@@ -1,6 +1,7 @@
 package de.jbdb.sql2json.step1.input;
 
 import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalArgument;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
@@ -19,6 +20,13 @@ public class InsertStatement {
 			throwIllegalArgument(
 					"InsertStatement construction parameter was empty! Please check caller so he supplies a valid parameter!");
 		}
+
+		String[] tableAndValues = statement.split("(?i)VALUES");
+		assertThat(tableAndValues).describedAs("Now thats a strange statement with multiple Values: %s", statement)
+				.hasSize(2);
+
+		setTableAndColumnsFrom(tableAndValues[0]);
+		setValueRowsFrom(tableAndValues[1]);
 	}
 
 	public TableName getTableName() {
@@ -35,5 +43,19 @@ public class InsertStatement {
 
 	public List<ValueRow> getValueRows() {
 		return valueRows;
+	}
+
+	private void setTableAndColumnsFrom(String insertIntoTableWithColumns) {
+		String tableAndColumns = insertIntoTableWithColumns.replaceFirst("(?i)INSERT\\hINTO\\h", "");
+		String[] tableAndColumnsSplit = tableAndColumns.split("(");
+		assertThat(tableAndColumnsSplit).as("Now thats a strange statement with multiple brackets behind the table: %s",
+				insertIntoTableWithColumns).hasSize(2);
+
+		tableName = new TableName(tableAndColumnsSplit[0]);
+	}
+
+	private void setValueRowsFrom(String string) {
+		// TODO Auto-generated method stub
+
 	}
 }

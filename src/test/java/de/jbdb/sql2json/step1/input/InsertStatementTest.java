@@ -50,4 +50,6 @@ public class InsertStatementTest {
 		assertThat(rowValues).hasSize(2);
 		assertThat(rowValues).contains(new ValueRow(TEST_VALUE1), new ValueRow(TEST_VALUE2));
 	}
+
+	// insert with lower case letters
 }
