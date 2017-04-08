@@ -1,10 +1,11 @@
 package de.jbdb.sql2json.step1.input;
 
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTINSERT;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_TABLE;
 import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,13 +20,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SqlDumpFileScannerTest {
-
-	private static final String TEST_TABLE = "testTable";
-	private static final String TEST_COLUMN = "testColumn";
-	private static final String TEST_VALUE1 = "testValue1";
-	private static final String TEST_VALUE2 = "testValue2";
-	private static final String[] TESTINSERT = { "INSERT INTO " + TEST_TABLE + " (" + TEST_COLUMN + ") VALUES ",
-			"(" + TEST_VALUE1 + ", " + TEST_VALUE2 + ");" };
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -104,15 +98,5 @@ public class SqlDumpFileScannerTest {
 
 		InsertStatement insert = resultMap.values().stream().findFirst().get();
 		assertThat(insert).isNotNull();
-		assertThat(insert.getTableName()).isEqualTo(TEST_TABLE);
-		assertThat(insert.getColumnNames()).isNotNull();
-		assertThat(insert.getColumnNames()).hasSize(1);
-		assertThat(insert.getColumnNames().get(0)).isEqualTo(TEST_COLUMN);
-
-		List<ValueRow> rowValues = insert.getValueRows();
-		assertThat(rowValues).isNotNull();
-		assertThat(rowValues).isNotEmpty();
-		assertThat(rowValues).hasSize(2);
-		assertThat(rowValues).contains(new ValueRow(TEST_VALUE1), new ValueRow(TEST_VALUE2));
 	}
 }
