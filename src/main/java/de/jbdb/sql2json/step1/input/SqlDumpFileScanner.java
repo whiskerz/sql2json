@@ -13,6 +13,12 @@ public class SqlDumpFileScanner {
 		NO_INSERT, INSERT
 	}
 
+	// MESSAGES
+	private static final String DIRECTORY_PATH_NULL_EMPTY = "A given path was null or empty. This is a parameter error. Calling class gave illegal arguments. Please check caller.";
+	private static final String DIRECTORY_DOESNT_EXIST = "A given path leads to a non existant directory. This is a parameter error. Calling class gave illegal arguments. Please check caller.";
+	private static final String IOEXCEPTION_READING_FILELIST = "An IOException occured while trying to read the file list: ";
+	private static final String IOEXCEPTION_READING_FILE = "An IOException occured while trying to read a single file: ";
+
 	// CONSTANTS
 	private static final String INSERT_START = "INSERT";
 	private static final String INSERT_END = ";";
@@ -50,33 +56,30 @@ public class SqlDumpFileScanner {
 	// PRIVATE METHODS
 	private void scanDirectory(String directoryPath) {
 		if (directoryPath == null || directoryPath.isEmpty()) {
-			scanResult.setResultStatus(ScanResultStatus.PARTIAL);
+			scanResult.addError(DIRECTORY_PATH_NULL_EMPTY);
 			return;
 		}
-		
+
 		Path directory = fileHandler.get(directoryPath);
 		if (Files.notExists(directory)) {
-			scanResult.setResultStatus(ScanResultStatus.PARTIAL);
+			scanResult.addError(DIRECTORY_DOESNT_EXIST);
 			return;
 		}
-		
+
 		try {
-			fileHandler.files(directory).filter(this::exists).filter(this::isSqlFile).forEach(this::scanFile);;
+			fileHandler.files(directory).filter(this::exists).filter(this::isSqlFile).forEach(this::scanFile);
 		} catch (IOException e) {
-			scanResult.setResultStatus(ScanResultStatus.PARTIAL);
-			// TODO: Real logging
-			e.printStackTrace();
+			scanResult.addError(IOEXCEPTION_READING_FILELIST + e.getMessage());
 		}
 	}
-	
+
 	private void scanFile(Path filePath) {
 		try (Stream<String> stream = fileHandler.lines(filePath)) {
 
 			stream.forEach(this::scanLine);
 
 		} catch (IOException e) {
-			// TODO: Real logging
-			e.printStackTrace();
+			scanResult.addError(IOEXCEPTION_READING_FILE + e.getMessage());
 		}
 	}
 
@@ -95,13 +98,13 @@ public class SqlDumpFileScanner {
 			}
 		}
 	}
-	
+
 	private boolean exists(Path filePath) {
 		return Files.exists(filePath);
 	}
-	
+
 	private boolean isSqlFile(Path filePath) {
-		return !Files.isDirectory(filePath) && filePath.endsWith(SQL_EXTENSION);
+		return !Files.isDirectory(filePath) && filePath.toString().endsWith(SQL_EXTENSION);
 	}
 
 }

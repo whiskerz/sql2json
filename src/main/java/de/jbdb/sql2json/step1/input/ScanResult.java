@@ -1,20 +1,30 @@
 package de.jbdb.sql2json.step1.input;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ScanResult {
 
-	private ScanResultStatus resultStatus = ScanResultStatus.FULL;
-	private List<String> errorMessages;
-	
-	private Map<TableName, InsertStatement> resultMap;
+	private List<String> errorMessages = new ArrayList<>();
+
+	private Map<TableName, InsertStatement> resultMap = new HashMap<>();
 
 	public ScanResultStatus getResultStatus() {
-		return resultStatus;
+		if (resultMap.isEmpty()) {
+			return ScanResultStatus.FAIL;
+		}
+		if (!errorMessages.isEmpty()) {
+			return ScanResultStatus.PARTIAL;
+		}
+		return ScanResultStatus.FULL;
 	}
 
 	public String getErrorMessages() {
+		if (errorMessages.isEmpty()) {
+			return "";
+		}
 		return errorMessages.toString();
 	}
 
@@ -31,8 +41,8 @@ public class ScanResult {
 		}
 	}
 
-	public void setResultStatus(ScanResultStatus resultStatus) {
-		this.resultStatus = resultStatus;
+	public void addError(String errorMessage) {
+		this.errorMessages.add(errorMessage);
 	}
 
 }

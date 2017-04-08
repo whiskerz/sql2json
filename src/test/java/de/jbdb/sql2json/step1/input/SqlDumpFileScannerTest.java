@@ -2,7 +2,6 @@ package de.jbdb.sql2json.step1.input;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -17,8 +16,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,7 +27,7 @@ public class SqlDumpFileScannerTest {
 	private static final String TEST_VALUE1 = "testValue1";
 	private static final String TEST_VALUE2 = "testValue2";
 	private static final String[] TESTINSERT = { "INSERT INTO " + TEST_TABLE + " (" + TEST_COLUMN + ") VALUES ",
-			"(" + TEST_VALUE1 + ", " + TEST_VALUE2 + ")" };
+			"(" + TEST_VALUE1 + ", " + TEST_VALUE2 + ");" };
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -38,14 +35,12 @@ public class SqlDumpFileScannerTest {
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
 
-	@Mock
-	private FileHandler fileHandlerMock;
-
 	private SqlDumpFileScanner classUnderTest;
 
 	@Before
 	public void before() {
-		classUnderTest = new SqlDumpFileScanner(fileHandlerMock);
+		FileHandler fileHandler = new FileHandler();
+		classUnderTest = new SqlDumpFileScanner(fileHandler);
 	}
 
 	@Test
@@ -81,12 +76,13 @@ public class SqlDumpFileScannerTest {
 	@Test
 	public void testScanDirectories_OneNullArgument() throws Exception {
 		final File tempFile = tempFolder.newFile("tempFile.sql");
-		FileUtils.writeStringToFile(tempFile, "hello world", Charset.defaultCharset());
+		FileUtils.writeStringToFile(tempFile, String.join("\n", TESTINSERT), Charset.defaultCharset());
 
-		ScanResult directoryScan = classUnderTest.scanDirectories(new String[] { TESTPATH, null });
+		ScanResult directoryScan = classUnderTest
+				.scanDirectories(new String[] { tempFolder.getRoot().getAbsolutePath(), null });
 
 		assertThat(directoryScan.getResultStatus()).isEqualTo(ScanResultStatus.PARTIAL);
-		assertThat(directoryScan.getErrorMessages()).containsIgnoringCase("filename may not be null");
+		assertThat(directoryScan.getErrorMessages()).containsIgnoringCase("path was null or empty");
 	}
 
 	// Missing Tests: FileHandler throws IOException on directory listing, on file line reading
@@ -95,10 +91,8 @@ public class SqlDumpFileScannerTest {
 	public void testScanDirectories_HappyPathOneFile() throws Exception {
 
 		Path irrelevantPath = mock(Path.class);
-		when(fileHandlerMock.get(TESTPATH)).thenReturn(irrelevantPath);
 
 		Stream<String> fileAsStream = Stream.of(TESTINSERT);
-		when(fileHandlerMock.lines(Mockito.any(Path.class))).thenReturn(fileAsStream);
 
 		ScanResult scanResult = classUnderTest.scanDirectories(TESTPATH);
 
