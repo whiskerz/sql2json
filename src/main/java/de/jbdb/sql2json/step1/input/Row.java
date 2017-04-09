@@ -1,10 +1,10 @@
 package de.jbdb.sql2json.step1.input;
 
-public class ValueRow {
+public class Row {
 
 	private String valueRow;
 
-	public ValueRow(String valueRow) {
+	public Row(String valueRow) {
 		this.valueRow = valueRow;
 	}
 
@@ -24,7 +24,7 @@ public class ValueRow {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ValueRow other = (ValueRow) obj;
+		Row other = (Row) obj;
 		if (valueRow == null) {
 			if (other.valueRow != null)
 				return false;

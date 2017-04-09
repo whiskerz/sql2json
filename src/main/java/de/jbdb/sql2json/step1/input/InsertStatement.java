@@ -9,7 +9,7 @@ public class InsertStatement {
 
 	private TableName tableName;
 	private Columns columns;
-	private List<ValueRow> valueRows;
+	private Rows valueRows;
 
 	public InsertStatement(String statement) {
 		if (statement == null) {
@@ -41,8 +41,8 @@ public class InsertStatement {
 		return columns.getNames();
 	}
 
-	public List<ValueRow> getValueRows() {
-		return valueRows;
+	public List<Row> getValueRows() {
+		return valueRows.asList();
 	}
 
 	private void setTableAndColumnsFrom(String insertIntoTableWithColumns) {
@@ -55,8 +55,7 @@ public class InsertStatement {
 		columns = new Columns(tableAndColumnsSplit[1]);
 	}
 
-	private void setValueRowsFrom(String string) {
-		// TODO Auto-generated method stub
-
+	private void setValueRowsFrom(String valueRowsString) {
+		valueRows = new Rows(valueRowsString);
 	}
 }
