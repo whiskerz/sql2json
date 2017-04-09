@@ -39,10 +39,10 @@ public class InsertStatementTest {
 
 		InsertStatement insertStatement = new InsertStatement(String.join(" ", TESTINSERT));
 
-		assertThat(insertStatement.getTableName()).isEqualTo(TEST_TABLE);
+		assertThat(insertStatement.getTableName()).isEqualTo(new TableName(TEST_TABLE));
 		assertThat(insertStatement.getColumnNames()).isNotNull();
 		assertThat(insertStatement.getColumnNames()).hasSize(1);
-		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(TEST_COLUMN);
+		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(new ColumnName(TEST_COLUMN));
 
 		List<ValueRow> rowValues = insertStatement.getValueRows();
 		assertThat(rowValues).isNotNull();

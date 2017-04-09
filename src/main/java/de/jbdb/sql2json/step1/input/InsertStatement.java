@@ -8,7 +8,7 @@ import java.util.List;
 public class InsertStatement {
 
 	private TableName tableName;
-	private List<ColumnName> columnNames;
+	private Columns columns;
 	private List<ValueRow> valueRows;
 
 	public InsertStatement(String statement) {
@@ -38,7 +38,7 @@ public class InsertStatement {
 	}
 
 	public List<ColumnName> getColumnNames() {
-		return columnNames;
+		return columns.getNames();
 	}
 
 	public List<ValueRow> getValueRows() {
@@ -47,11 +47,12 @@ public class InsertStatement {
 
 	private void setTableAndColumnsFrom(String insertIntoTableWithColumns) {
 		String tableAndColumns = insertIntoTableWithColumns.replaceFirst("(?i)INSERT\\hINTO\\h", "");
-		String[] tableAndColumnsSplit = tableAndColumns.split("(");
+		String[] tableAndColumnsSplit = tableAndColumns.split("\\(");
 		assertThat(tableAndColumnsSplit).as("Now thats a strange statement with multiple brackets behind the table: %s",
 				insertIntoTableWithColumns).hasSize(2);
 
 		tableName = new TableName(tableAndColumnsSplit[0]);
+		columns = new Columns(tableAndColumnsSplit[1]);
 	}
 
 	private void setValueRowsFrom(String string) {

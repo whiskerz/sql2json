@@ -22,4 +22,19 @@ public class TableNameTest {
 
 		assertThat(tableName.get()).isEqualTo(TEST_TABLE);
 	}
+
+	@Test
+	public void equalsAndSameUseGivenTableName() throws Exception {
+		TableName tableNameOne = new TableName("One");
+		TableName tableNameTwo = new TableName("One");
+
+		assertThat(tableNameOne.equals(tableNameTwo)).isTrue();
+		assertThat(tableNameOne.hashCode()).isEqualTo(tableNameTwo.hashCode());
+	}
+
+	@Test
+	public void toStringWillGiveTableName() throws Exception {
+
+		assertThat(new TableName(TEST_TABLE).toString()).isEqualTo(TEST_TABLE);
+	}
 }

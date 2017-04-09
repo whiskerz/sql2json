@@ -31,29 +31,15 @@ public class ColumnsTest {
 	}
 
 	@Test
-	public void constructionWithSingleQuotes() throws Exception {
-		Columns columns = new Columns("'" + TEST_COLUMN + "'");
-
-		assertColumns(columns, 1);
-	}
-
-	@Test
-	public void constructionWithDoubleQuotes() throws Exception {
-		Columns columns = new Columns("\"" + TEST_COLUMN + "\"");
-
-		assertColumns(columns, 1);
-	}
-
-	@Test
-	public void constructionWithBackticks() throws Exception {
-		Columns columns = new Columns("`" + TEST_COLUMN + "`");
-
-		assertColumns(columns, 1);
-	}
-
-	@Test
 	public void constructionWithWhitespace() throws Exception {
 		Columns columns = new Columns("    " + TEST_COLUMN + " \t, \t" + TEST_COLUMN + "      ");
+
+		assertColumns(columns, 2);
+	}
+
+	@Test
+	public void constructionWithTrailingBracesAndWhitespace() throws Exception {
+		Columns columns = new Columns(TEST_COLUMN + "," + TEST_COLUMN + ")    ");
 
 		assertColumns(columns, 2);
 	}
@@ -66,7 +52,7 @@ public class ColumnsTest {
 		assertThat(names).hasSize(size);
 
 		for (int i = 0; i < size; i++) {
-			assertThat(names.get(i)).isEqualTo(TEST_COLUMN);
+			assertThat(names.get(i)).isEqualTo(new ColumnName(TEST_COLUMN));
 		}
 	}
 }
