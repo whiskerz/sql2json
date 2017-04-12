@@ -2,9 +2,9 @@ package de.jbdb.sql2json.step1.input;
 
 public class Row {
 
-	private String valueRow;
+	private String[] valueRow;
 
-	public Row(String valueRow) {
+	public Row(String... valueRow) {
 		this.valueRow = valueRow;
 	}
 
