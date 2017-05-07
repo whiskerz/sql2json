@@ -26,4 +26,10 @@ public class Rows {
 	public List<Row> asList() {
 		return rowList;
 	}
+
+	@Override
+	public String toString() {
+		return "Rows [rowList=" + rowList + "]";
+	}
+
 }

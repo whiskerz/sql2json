@@ -44,12 +44,18 @@ public class InsertStatementTest {
 		assertThat(insertStatement.getColumnNames()).hasSize(1);
 		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(new ColumnName(TEST_COLUMN));
 
-		List<Row> rowValues = insertStatement.getValueRows();
-		assertThat(rowValues).describedAs("Row values").isNotNull();
-		assertThat(rowValues).describedAs("Row values").isNotEmpty();
-		assertThat(rowValues).hasSize(2);
-		assertThat(rowValues).contains(new Row(TEST_VALUE1), new Row(TEST_VALUE2));
+		List<Row> rows = insertStatement.getValueRows();
+		assertThat(rows).describedAs("Rows").isNotNull();
+		assertThat(rows).describedAs("Rows").isNotEmpty();
+		assertThat(rows).hasSize(1);
+
+		List<Value> values = rows.get(0).getValues();
+		assertThat(values).describedAs("Values").isNotNull();
+		assertThat(values).describedAs("Values").isNotEmpty();
+		assertThat(values).hasSize(2);
+		assertThat(values).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
 	}
 
+	// TODO: more complex test case
 	// TODO: test insert with lower case letters
 }

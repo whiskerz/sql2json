@@ -27,4 +27,9 @@ public class Columns {
 		return names;
 	}
 
+	@Override
+	public String toString() {
+		return "Columns [names=" + names + "]";
+	}
+
 }
