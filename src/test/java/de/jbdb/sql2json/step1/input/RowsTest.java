@@ -9,19 +9,8 @@ import org.junit.Test;
 
 public class RowsTest {
 
-	@Test
-	public void oneValueInOneRow() throws Exception {
-		Rows rows = new Rows("(" + TEST_VALUE1 + ")");
-
-		assertRows(rows, 1, 1);
-	}
-
-	@Test
-	public void twoValuesInOneRow() throws Exception {
-		Rows rows = new Rows("(" + TEST_VALUE1 + "," + TEST_VALUE1 + ")");
-
-		assertRows(rows, 2, 2);
-	}
+	// empty string = error
+	// null = error
 
 	@Test
 	public void twoValuesInTwoRowsEach() throws Exception {
@@ -39,6 +28,8 @@ public class RowsTest {
 		assertRows(rows, 2, 2);
 	}
 
+	// TODO assertAddAll
+
 	private void assertRows(Rows rows, int numberOfRows, int numberOfValues) {
 		List<Row> rowAsList = rows.asList();
 		assertThat(rowAsList).isNotNull();
@@ -48,10 +39,17 @@ public class RowsTest {
 	}
 
 	private Row createRow(int numberOfValues) {
-		String[] values = new String[numberOfValues];
-		for (int i = 0; i < values.length; i++) {
-			values[i] = TEST_VALUE1;
+		StringBuffer valueString = new StringBuffer();
+		valueString.append("(");
+		for (int i = 0; i < numberOfValues; i++) {
+			valueString.append(TEST_VALUE1);
+			valueString.append(",");
 		}
-		return new Row(values);
+		valueString.delete(valueString.length() - 1, valueString.length());
+
+		Row row = new Row(valueString.toString());
+		assertThat(row.getValues()).hasSize(numberOfValues);
+
+		return row;
 	}
 }

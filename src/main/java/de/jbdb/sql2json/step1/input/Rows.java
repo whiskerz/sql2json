@@ -1,11 +1,21 @@
 package de.jbdb.sql2json.step1.input;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Rows {
 
-	public Rows(String string) {
-		// TODO Auto-generated constructor stub
+	private ArrayList<Row> rowList;
+
+	public Rows(String rowAsString) {
+		String parameter = rowAsString;
+
+		String[] rowParts = parameter.split("\\s*\\)\\s*(,)\\s*\\(");
+
+		rowList = new ArrayList<Row>(rowParts.length);
+		for (String individualRow : rowParts) {
+			rowList.add(new Row(individualRow));
+		}
 	}
 
 	public void addAll(Rows valueRows) {
@@ -14,8 +24,6 @@ public class Rows {
 	}
 
 	public List<Row> asList() {
-		// TODO Auto-generated method stub
-		return null;
+		return rowList;
 	}
-
 }

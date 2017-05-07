@@ -45,8 +45,8 @@ public class InsertStatementTest {
 		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(new ColumnName(TEST_COLUMN));
 
 		List<Row> rowValues = insertStatement.getValueRows();
-		assertThat(rowValues).isNotNull();
-		assertThat(rowValues).isNotEmpty();
+		assertThat(rowValues).describedAs("Row values").isNotNull();
+		assertThat(rowValues).describedAs("Row values").isNotEmpty();
 		assertThat(rowValues).hasSize(2);
 		assertThat(rowValues).contains(new Row(TEST_VALUE1), new Row(TEST_VALUE2));
 	}
