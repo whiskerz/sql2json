@@ -28,7 +28,12 @@ public class RowsTest {
 		assertRows(rows, 2, 2);
 	}
 
-	// TODO assertAddAll
+	@Test
+	public void twoValuesWithTrailingBracketAndSemicolon() throws Exception {
+		Rows rows = new Rows("  (testValue1, testValue1);");
+
+		assertRows(rows, 1, 2);
+	}
 
 	private void assertRows(Rows rows, int numberOfRows, int numberOfValues) {
 		List<Row> rowAsList = rows.asList();

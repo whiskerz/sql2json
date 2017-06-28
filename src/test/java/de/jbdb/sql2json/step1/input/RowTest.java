@@ -1,6 +1,7 @@
 package de.jbdb.sql2json.step1.input;
 
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_VALUE1;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_VALUE2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -153,5 +154,16 @@ public class RowTest {
 
 		Value value1 = values.get(0);
 		assertThat(value1.toString()).isEqualTo(TEST_VALUE1);
+	}
+
+	@Test
+	public void twoValues_withBrackes_withoutQuotes_withSemicolon() throws Exception {
+		Row row = new Row("  (" + TEST_VALUE1 + ", " + TEST_VALUE2 + ");");
+
+		List<Value> values = row.getValues();
+		assertThat(values).describedAs("row values").isNotNull();
+		assertThat(values).describedAs("row values").isNotEmpty();
+		assertThat(values).describedAs("row values").hasSize(2);
+		assertThat(values).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
 	}
 }

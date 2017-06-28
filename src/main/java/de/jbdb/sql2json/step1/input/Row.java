@@ -14,6 +14,10 @@ public class Row {
 			parameter = parameter.substring(1).trim();
 		}
 
+		if (parameter.endsWith(";")) {
+			parameter = parameter.substring(0, parameter.length() - 1).trim();
+		}
+
 		if (parameter.endsWith(")")) {
 			parameter = parameter.substring(0, parameter.length() - 1).trim();
 		}
@@ -21,6 +25,7 @@ public class Row {
 		valueList = new ArrayList<>();
 
 		// TODO yuk
+		// This is done like it is because it was the first obvious solution. Did not want to spend to much time on it
 		while (!parameter.isEmpty()) {
 			if (parameter.startsWith("'")) {
 				int closingQuoteIndex = parameter.indexOf("'", 1);
