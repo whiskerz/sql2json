@@ -17,4 +17,6 @@ public interface Sql2JSONTestObjects {
 	String TEST_VALUE2 = "testValue2";
 	String[] TESTINSERT = { "INSERT INTO " + TEST_TABLE + " (" + TEST_COLUMN + ") VALUES ",
 			"(" + TEST_VALUE1 + ", " + TEST_VALUE2 + ");" };
+
+	String TESTJSON = "{\"" + TEST_TABLE + "\"";
 }
