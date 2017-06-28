@@ -1,11 +1,15 @@
 package de.jbdb.sql2json.step1.input;
 
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTINSERT;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_COLUMN;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_TABLE;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_VALUE1;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_VALUE2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -94,9 +98,70 @@ public class SqlDumpFileScannerTest {
 		assertThat(tableNameSet).isNotNull();
 		assertThat(tableNameSet).isNotEmpty();
 		assertThat(tableNameSet).hasSize(1);
-		assertThat(tableNameSet.toArray(new TableName[1])[0]).isEqualTo(TEST_TABLE);
+		assertThat(tableNameSet.stream().findFirst().get()).isEqualTo(new TableName(TEST_TABLE));
 
-		InsertStatement insert = resultMap.values().stream().findFirst().get();
-		assertThat(insert).isNotNull();
+		InsertStatement insertStatement = resultMap.values().stream().findFirst().get();
+		assertThat(insertStatement).isNotNull();
+		assertThat(insertStatement.getTableName()).isEqualTo(new TableName(TEST_TABLE));
+		assertThat(insertStatement.getColumnNames()).isNotNull();
+		assertThat(insertStatement.getColumnNames()).hasSize(1);
+		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(new ColumnName(TEST_COLUMN));
+
+		List<Row> rows = insertStatement.getValueRows();
+		assertThat(rows).describedAs("Rows").isNotNull();
+		assertThat(rows).describedAs("Rows").isNotEmpty();
+		assertThat(rows).hasSize(1);
+
+		List<Value> values = rows.get(0).getValues();
+		assertThat(values).describedAs("Values").isNotNull();
+		assertThat(values).describedAs("Values").isNotEmpty();
+		assertThat(values).hasSize(2);
+		assertThat(values).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
+	}
+
+	@Test
+	public void testScanDirectories_TwoIdenticalFiles_ExpectOneInsertButDuplicateValues() throws Exception {
+		final File tempFile1 = tempFolder.newFile("tempFile1.sql");
+		FileUtils.writeStringToFile(tempFile1, String.join("\n", TESTINSERT), Charset.defaultCharset());
+		final File tempFile2 = tempFolder.newFile("tempFile2.sql");
+		FileUtils.writeStringToFile(tempFile2, String.join("\n", TESTINSERT), Charset.defaultCharset());
+
+		ScanResult scanResult = classUnderTest.scanDirectories(tempFolder.getRoot().getAbsolutePath());
+
+		Map<TableName, InsertStatement> resultMap = scanResult.getAllResults();
+
+		assertThat(resultMap).isNotNull();
+		assertThat(resultMap).isNotEmpty();
+		assertThat(resultMap).hasSize(1);
+
+		Set<TableName> tableNameSet = resultMap.keySet();
+		assertThat(tableNameSet).isNotNull();
+		assertThat(tableNameSet).isNotEmpty();
+		assertThat(tableNameSet).hasSize(1);
+		assertThat(tableNameSet.stream().findFirst().get()).isEqualTo(new TableName(TEST_TABLE));
+
+		InsertStatement insertStatement = resultMap.values().stream().findFirst().get();
+		assertThat(insertStatement).isNotNull();
+		assertThat(insertStatement.getTableName()).isEqualTo(new TableName(TEST_TABLE));
+		assertThat(insertStatement.getColumnNames()).isNotNull();
+		assertThat(insertStatement.getColumnNames()).hasSize(1);
+		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(new ColumnName(TEST_COLUMN));
+
+		List<Row> rows = insertStatement.getValueRows();
+		assertThat(rows).describedAs("Rows").isNotNull();
+		assertThat(rows).describedAs("Rows").isNotEmpty();
+		assertThat(rows).hasSize(2);
+
+		List<Value> values1 = rows.get(0).getValues();
+		assertThat(values1).describedAs("Values").isNotNull();
+		assertThat(values1).describedAs("Values").isNotEmpty();
+		assertThat(values1).hasSize(2);
+		assertThat(values1).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
+
+		List<Value> values2 = rows.get(1).getValues();
+		assertThat(values2).describedAs("Values").isNotNull();
+		assertThat(values2).describedAs("Values").isNotEmpty();
+		assertThat(values2).hasSize(2);
+		assertThat(values2).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
 	}
 }

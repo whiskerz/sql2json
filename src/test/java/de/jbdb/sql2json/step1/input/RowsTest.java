@@ -35,6 +35,18 @@ public class RowsTest {
 		assertRows(rows, 1, 2);
 	}
 
+	@Test
+	public void addAll() throws Exception {
+
+		Rows rows1 = new Rows(TEST_VALUE1);
+		Rows rows2 = new Rows(TEST_VALUE1);
+
+		rows1.addAll(rows2);
+
+		assertRows(rows1, 2, 1);
+		assertRows(rows2, 1, 1);
+	}
+
 	private void assertRows(Rows rows, int numberOfRows, int numberOfValues) {
 		List<Row> rowAsList = rows.asList();
 		assertThat(rowAsList).isNotNull();

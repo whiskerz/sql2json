@@ -24,7 +24,6 @@ public class Row {
 
 		valueList = new ArrayList<>();
 
-		// TODO yuk
 		// This is done like it is because it was the first obvious solution. Did not want to spend to much time on it
 		while (!parameter.isEmpty()) {
 			if (parameter.startsWith("'")) {

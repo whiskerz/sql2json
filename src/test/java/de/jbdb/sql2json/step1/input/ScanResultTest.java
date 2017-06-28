@@ -1,6 +1,15 @@
 package de.jbdb.sql2json.step1.input;
 
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTINSERT;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_COLUMN;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_TABLE;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_VALUE1;
+import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_VALUE2;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,5 +47,49 @@ public class ScanResultTest {
 		classUnderTest.addError("Generic Error");
 
 		assertThat(classUnderTest.getResultStatus()).isEqualTo(ScanResultStatus.PARTIAL);
+	}
+
+	@Test
+	public void addingSameTableWillMerge() throws Exception {
+		InsertStatement insert = new InsertStatement(String.join(" ", TESTINSERT));
+
+		classUnderTest.add(insert);
+		classUnderTest.add(insert);
+
+		Map<TableName, InsertStatement> resultMap = classUnderTest.getAllResults();
+
+		assertThat(resultMap).isNotNull();
+		assertThat(resultMap).isNotEmpty();
+		assertThat(resultMap).hasSize(1);
+
+		Set<TableName> tableNameSet = resultMap.keySet();
+		assertThat(tableNameSet).isNotNull();
+		assertThat(tableNameSet).isNotEmpty();
+		assertThat(tableNameSet).hasSize(1);
+		assertThat(tableNameSet.stream().findFirst().get()).isEqualTo(new TableName(TEST_TABLE));
+
+		InsertStatement insertStatement = resultMap.values().stream().findFirst().get();
+		assertThat(insertStatement).isNotNull();
+		assertThat(insertStatement.getTableName()).isEqualTo(new TableName(TEST_TABLE));
+		assertThat(insertStatement.getColumnNames()).isNotNull();
+		assertThat(insertStatement.getColumnNames()).hasSize(1);
+		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(new ColumnName(TEST_COLUMN));
+
+		List<Row> rows = insertStatement.getValueRows();
+		assertThat(rows).describedAs("Rows").isNotNull();
+		assertThat(rows).describedAs("Rows").isNotEmpty();
+		assertThat(rows).hasSize(2);
+
+		List<Value> values1 = rows.get(0).getValues();
+		assertThat(values1).describedAs("Values").isNotNull();
+		assertThat(values1).describedAs("Values").isNotEmpty();
+		assertThat(values1).hasSize(2);
+		assertThat(values1).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
+
+		List<Value> values2 = rows.get(0).getValues();
+		assertThat(values2).describedAs("Values").isNotNull();
+		assertThat(values2).describedAs("Values").isNotEmpty();
+		assertThat(values2).hasSize(2);
+		assertThat(values2).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
 	}
 }

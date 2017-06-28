@@ -18,10 +18,9 @@ public class Rows {
 		}
 	}
 
-	// public void addAll(Rows valueRows) {
-	// // TODO Auto-generated method stub
-	//
-	// }
+	public void addAll(Rows valueRows) {
+		this.rowList.addAll(valueRows.rowList);
+	}
 
 	public List<Row> asList() {
 		return rowList;

@@ -33,9 +33,9 @@ public class InsertStatement {
 		return tableName;
 	}
 
-	// public void mergeWith(InsertStatement otherInsert) {
-	// valueRows.addAll(otherInsert.valueRows);
-	// }
+	public void mergeWith(InsertStatement otherInsert) {
+		valueRows.addAll(otherInsert.valueRows);
+	}
 
 	public List<ColumnName> getColumnNames() {
 		return columns.getNames();

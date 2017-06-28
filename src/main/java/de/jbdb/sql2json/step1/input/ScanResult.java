@@ -33,12 +33,12 @@ public class ScanResult {
 	}
 
 	public void add(InsertStatement insert) {
-		// if (resultMap.containsKey(insert.getTableName())) {
-		// InsertStatement existingInsert = resultMap.get(insert.getTableName());
-		// existingInsert.mergeWith(insert);
-		// } else {
-		resultMap.put(insert.getTableName(), insert);
-		// }
+		if (resultMap.containsKey(insert.getTableName())) {
+			InsertStatement existingInsert = resultMap.get(insert.getTableName());
+			existingInsert.mergeWith(insert);
+		} else {
+			resultMap.put(insert.getTableName(), insert);
+		}
 	}
 
 	public void addError(String errorMessage) {
