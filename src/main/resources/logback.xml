@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml" />
-    <root level="DEBUG" />
-    <logger name="org.springframework.web" level="DEBUG" />
-    <logger name="de.jbdb.sql2json" level="DEBUG" />
+    <root level="ERROR" />
+    <logger name="org.springframework.web" level="WARN" />
+    <logger name="de.jbdb.sql2json" level="WARN" />
 </configuration>
