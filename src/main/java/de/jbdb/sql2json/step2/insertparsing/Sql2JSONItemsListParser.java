@@ -7,8 +7,6 @@ import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
@@ -20,8 +18,6 @@ import net.sf.jsqlparser.statement.select.SubSelect;
 
 public class Sql2JSONItemsListParser implements ItemsListVisitor {
 
-	@NotNull
-	@Size(min = 1)
 	private List<Column> columns;
 	private JsonArrayBuilder jsonArrayBuilder;
 
