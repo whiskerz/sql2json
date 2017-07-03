@@ -22,8 +22,14 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import de.jbdb.sql2json.step1.input.modell.ColumnName;
+import de.jbdb.sql2json.step1.input.modell.InsertStatement;
+import de.jbdb.sql2json.step1.input.modell.Row;
+import de.jbdb.sql2json.step1.input.modell.TableName;
+import de.jbdb.sql2json.step1.input.modell.Value;
+
 @RunWith(MockitoJUnitRunner.class)
-public class SqlDumpFileScannerTest {
+public class SqlInsertDirectoryScannerTest {
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -31,12 +37,12 @@ public class SqlDumpFileScannerTest {
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
 
-	private SqlDumpFileScanner classUnderTest;
+	private SqlInsertDirectoryScanner classUnderTest;
 
 	@Before
 	public void before() {
 		FileHandler fileHandler = new FileHandler();
-		classUnderTest = new SqlDumpFileScanner(fileHandler);
+		classUnderTest = new SqlInsertDirectoryScanner(fileHandler);
 	}
 
 	@Test
@@ -45,7 +51,7 @@ public class SqlDumpFileScannerTest {
 		expectedException.expect(IllegalArgumentException.class);
 		expectedException.expectMessage("service for file handling is required");
 
-		new SqlDumpFileScanner(null);
+		new SqlInsertDirectoryScanner(null);
 	}
 
 	@Test
