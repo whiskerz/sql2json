@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.jbdb.sql2json.step1.input.modell.InsertStatement;
+import de.jbdb.sql2json.step1.input.modell.TableName;
+
 public class ScanResult {
 
 	private List<String> errorMessages = new ArrayList<>();

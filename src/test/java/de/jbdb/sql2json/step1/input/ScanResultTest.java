@@ -14,6 +14,12 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.jbdb.sql2json.step1.input.modell.ColumnName;
+import de.jbdb.sql2json.step1.input.modell.InsertStatement;
+import de.jbdb.sql2json.step1.input.modell.Row;
+import de.jbdb.sql2json.step1.input.modell.TableName;
+import de.jbdb.sql2json.step1.input.modell.Value;
+
 public class ScanResultTest {
 
 	private ScanResult classUnderTest;

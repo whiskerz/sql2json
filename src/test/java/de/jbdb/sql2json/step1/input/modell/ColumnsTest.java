@@ -1,4 +1,4 @@
-package de.jbdb.sql2json.step1.input;
+package de.jbdb.sql2json.step1.input.modell;
 
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_COLUMN;
 import static org.assertj.core.api.Assertions.assertThat;

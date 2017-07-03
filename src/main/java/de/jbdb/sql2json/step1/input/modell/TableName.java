@@ -1,4 +1,4 @@
-package de.jbdb.sql2json.step1.input;
+package de.jbdb.sql2json.step1.input.modell;
 
 public class TableName {
 

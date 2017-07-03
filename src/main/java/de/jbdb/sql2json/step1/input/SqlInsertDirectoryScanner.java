@@ -8,7 +8,11 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class SqlDumpFileScanner {
+import org.springframework.beans.factory.annotation.Autowired;
+
+import de.jbdb.sql2json.step1.input.modell.InsertStatement;
+
+public class SqlInsertDirectoryScanner {
 	private enum State {
 		NO_INSERT, INSERT
 	}
@@ -33,7 +37,8 @@ public class SqlDumpFileScanner {
 	private ScanResult scanResult;
 
 	// CONSTRUCTOR
-	public SqlDumpFileScanner(FileHandler fileHandler) {
+	@Autowired(required = true)
+	public SqlInsertDirectoryScanner(FileHandler fileHandler) {
 		if (fileHandler == null) {
 			throwIllegalArgument("A service for file handling is required for this scanner.");
 		}

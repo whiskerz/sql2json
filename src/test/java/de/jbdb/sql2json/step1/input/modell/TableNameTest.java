@@ -1,9 +1,11 @@
-package de.jbdb.sql2json.step1.input;
+package de.jbdb.sql2json.step1.input.modell;
 
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TEST_TABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
+
+import de.jbdb.sql2json.step1.input.modell.TableName;
 
 public class TableNameTest {
 

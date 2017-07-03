@@ -1,4 +1,4 @@
-package de.jbdb.sql2json.step1.input;
+package de.jbdb.sql2json.step1.input.modell;
 
 import java.util.Arrays;
 import java.util.List;

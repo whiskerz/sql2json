@@ -1,4 +1,4 @@
-package de.jbdb.sql2json.step1.input;
+package de.jbdb.sql2json.step1.input.modell;
 
 import static de.jbdb.sql2json.ConvenientIllegalArgumentException.throwIllegalArgument;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,5 +57,10 @@ public class InsertStatement {
 
 	private void setValueRowsFrom(String valueRowsString) {
 		valueRows = new Rows(valueRowsString);
+	}
+
+	public String toJSON() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
