@@ -36,6 +36,48 @@ public class InsertStatementTest {
 	}
 
 	@Test
+	public void constructorWithMissingValueStatement() throws Exception {
+
+		expectedException.expect(AssertionError.class);
+		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("missing value statement"));
+
+		new InsertStatement("INSERT INTO 'TEST_TABLE'");
+	}
+
+	@Test
+	public void constructorWithMissingColumnStatement() throws Exception {
+		expectedException.expect(AssertionError.class);
+		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("missing column statement"));
+
+		new InsertStatement("INSERT INTO 'TEST_TABLE' VALUES ");
+	}
+
+	@Test
+	public void constructorWithNoValues() throws Exception {
+		expectedException.expect(AssertionError.class);
+		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("missing values"));
+
+		new InsertStatement("INSERT INTO 'TEST_TABLE'('TEST_COLUMN') VALUES ");
+	}
+
+	@Test
+	public void constructorWithLessValuesThanColumns() throws Exception {
+		expectedException.expect(AssertionError.class);
+		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("fewer values than columns"));
+
+		new InsertStatement("INSERT INTO 'TEST_TABLE'('TEST_COLUMN1', 'TEST_COLUMN2') VALUES ('TEST_VALUE1');");
+	}
+
+	@Test
+	public void constructorWithMoreValuesThanColumns() throws Exception {
+		expectedException.expect(AssertionError.class);
+		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("more values than columns"));
+
+		new InsertStatement(
+				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN1', 'TEST_COLUMN2') VALUES ('TEST_VALUE1', 'TEST_VALUE2', 'TEST_VALUE3');");
+	}
+
+	@Test
 	public void constructorWithSimpleInsert() throws Exception {
 
 		InsertStatement insertStatement = new InsertStatement(String.join(" ", TESTINSERT));
@@ -157,4 +199,14 @@ public class InsertStatementTest {
 				.containsExactlyInAnyOrder(new Value(edit1), new Value(edit2), new Value(edit3));
 	}
 
+	@Test
+	public void toJSON_OneValue() throws Exception {
+
+		InsertStatement classUnderTest = new InsertStatement(
+				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN') VALUES ('TEST_VALUE1');");
+
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[{\"TEST_COLUMN\":\"TEST_VALUE\"}]}");
+	}
 }

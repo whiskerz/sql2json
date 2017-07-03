@@ -22,6 +22,9 @@ public class InsertStatement {
 		}
 
 		String[] tableAndValues = statement.split("(?i)VALUES");
+
+		assertThat(tableAndValues.length)
+				.describedAs("There seems to be the case of a missing value statement: %s", statement).isGreaterThan(1);
 		assertThat(tableAndValues).describedAs("Now thats a strange statement with multiple Values: %s", statement)
 				.hasSize(2);
 
@@ -48,6 +51,10 @@ public class InsertStatement {
 	private void setTableAndColumnsFrom(String insertIntoTableWithColumns) {
 		String tableAndColumns = insertIntoTableWithColumns.replaceFirst("(?i)INSERT\\hINTO\\h", "");
 		String[] tableAndColumnsSplit = tableAndColumns.split("\\(");
+
+		assertThat(tableAndColumnsSplit.length)
+				.as("This seems to be a case of missing column statement: %s", insertIntoTableWithColumns)
+				.isGreaterThan(1);
 		assertThat(tableAndColumnsSplit).as("Now thats a strange statement with multiple brackets behind the table: %s",
 				insertIntoTableWithColumns).hasSize(2);
 
@@ -60,7 +67,6 @@ public class InsertStatement {
 	}
 
 	public String toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 }
