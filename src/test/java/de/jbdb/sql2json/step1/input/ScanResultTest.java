@@ -57,7 +57,7 @@ public class ScanResultTest {
 
 	@Test
 	public void addingSameTableWillMerge() throws Exception {
-		InsertStatement insert = new InsertStatement(String.join(" ", TESTINSERT));
+		InsertStatement insert = new InsertStatement(TESTINSERT);
 
 		classUnderTest.add(insert);
 		classUnderTest.add(insert);

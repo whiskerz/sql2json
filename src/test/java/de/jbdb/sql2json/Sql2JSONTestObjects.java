@@ -17,11 +17,10 @@ public interface Sql2JSONTestObjects {
 	String TEST_FOUR_COLUMNS = TEST_TWO_COLUMNS + "," + TEST_TWO_COLUMNS;
 	String TEST_VALUE1 = "testValue1";
 	String TEST_VALUE2 = "testValue2";
-	String[] TESTINSERT = { "INSERT INTO " + TEST_TABLE + " (" + TEST_TWO_COLUMNS + ") VALUES ",
-			"(" + TEST_VALUE1 + ", " + TEST_VALUE2 + ");" };
+	String TESTINSERT = "INSERT INTO " + TEST_TABLE + " (" + TEST_TWO_COLUMNS + ") VALUES (" + TEST_VALUE1 + ", "
+			+ TEST_VALUE2 + ");";
 
 	String TESTJSON = "{\"" + TEST_TABLE + "\":[" //
-			+ "{\"" + TEST_COLUMN + "\":\"" + TEST_VALUE1 + "\"}," //
-			+ "{\"" + TEST_COLUMN + "\":\"" + TEST_VALUE2 + "\"}" //
+			+ "{\"" + TEST_COLUMN + "\":\"" + TEST_VALUE1 + "\",\"" + TEST_COLUMN + "\":\"" + TEST_VALUE2 + "\"}" //
 			+ "]}"; //
 }

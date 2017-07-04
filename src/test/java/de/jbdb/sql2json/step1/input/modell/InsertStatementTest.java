@@ -82,7 +82,7 @@ public class InsertStatementTest {
 	@Test
 	public void constructorWithSimpleInsert() throws Exception {
 
-		InsertStatement insertStatement = new InsertStatement(String.join(" ", TESTINSERT));
+		InsertStatement insertStatement = new InsertStatement(TESTINSERT);
 
 		assertThat(insertStatement.getTableName()).isEqualTo(new TableName(TEST_TABLE));
 		assertThat(insertStatement.getColumnNames()).isNotNull();
@@ -225,14 +225,14 @@ public class InsertStatementTest {
 
 		String jsonString = classUnderTest.toJSON();
 
-		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[{\"TEST_COLUMN\":\"TEST_VALUE\"}]}");
+		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[{\"TEST_COLUMN\":\"TEST_VALUE1\"}]}");
 	}
 
 	@Test
 	public void toJSON_TwoValues() throws Exception {
 
 		InsertStatement classUnderTest = new InsertStatement(
-				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN1','TEST_COLUMN2') VALUES ('TEST_VALUE1','TEST_VALUE2);");
+				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN1','TEST_COLUMN2') VALUES ('TEST_VALUE1','TEST_VALUE2');");
 
 		String jsonString = classUnderTest.toJSON();
 
@@ -244,7 +244,7 @@ public class InsertStatementTest {
 	public void toJSON_TwoRowsWithTwoValuesEach() throws Exception {
 
 		InsertStatement classUnderTest = new InsertStatement(
-				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN1','TEST_COLUMN2') VALUES ('TEST_VALUE1','TEST_VALUE2),('TEST_VALUE3','TEST_VALUE4);");
+				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN1','TEST_COLUMN2') VALUES ('TEST_VALUE1','TEST_VALUE2'),('TEST_VALUE3','TEST_VALUE4');");
 
 		String jsonString = classUnderTest.toJSON();
 

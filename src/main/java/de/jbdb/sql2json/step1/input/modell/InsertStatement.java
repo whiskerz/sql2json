@@ -67,6 +67,6 @@ public class InsertStatement {
 	}
 
 	public String toJSON() {
-		return "";
+		return "{\"" + tableName.toString() + "\":" + valueRows.toJSON() + "}";
 	}
 }

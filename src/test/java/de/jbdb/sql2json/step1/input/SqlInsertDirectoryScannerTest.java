@@ -78,7 +78,7 @@ public class SqlInsertDirectoryScannerTest {
 	@Test
 	public void testScanDirectories_OneNullArgument() throws Exception {
 		final File tempFile = tempFolder.newFile("tempFile.sql");
-		FileUtils.writeStringToFile(tempFile, String.join("\n", TESTINSERT), Charset.defaultCharset());
+		FileUtils.writeStringToFile(tempFile, TESTINSERT, Charset.defaultCharset());
 
 		ScanResult directoryScan = classUnderTest
 				.scanDirectories(new String[] { tempFolder.getRoot().getAbsolutePath(), null });
@@ -90,7 +90,7 @@ public class SqlInsertDirectoryScannerTest {
 	@Test
 	public void testScanDirectories_HappyPathOneFile() throws Exception {
 		final File tempFile = tempFolder.newFile("tempFile.sql");
-		FileUtils.writeStringToFile(tempFile, String.join("\n", TESTINSERT), Charset.defaultCharset());
+		FileUtils.writeStringToFile(tempFile, TESTINSERT, Charset.defaultCharset());
 
 		ScanResult scanResult = classUnderTest.scanDirectories(tempFolder.getRoot().getAbsolutePath());
 
@@ -130,9 +130,9 @@ public class SqlInsertDirectoryScannerTest {
 	@Test
 	public void testScanDirectories_TwoIdenticalFiles_ExpectOneInsertButDuplicateValues() throws Exception {
 		final File tempFile1 = tempFolder.newFile("tempFile1.sql");
-		FileUtils.writeStringToFile(tempFile1, String.join("\n", TESTINSERT), Charset.defaultCharset());
+		FileUtils.writeStringToFile(tempFile1, TESTINSERT, Charset.defaultCharset());
 		final File tempFile2 = tempFolder.newFile("tempFile2.sql");
-		FileUtils.writeStringToFile(tempFile2, String.join("\n", TESTINSERT), Charset.defaultCharset());
+		FileUtils.writeStringToFile(tempFile2, TESTINSERT, Charset.defaultCharset());
 
 		ScanResult scanResult = classUnderTest.scanDirectories(tempFolder.getRoot().getAbsolutePath());
 

@@ -6,11 +6,7 @@ public class TableName {
 
 	public TableName(String name) {
 		this.tableName = name.trim();
-		this.tableName = this.tableName.replaceAll("`", "");
-	}
-
-	public String get() {
-		return tableName;
+		this.tableName = this.tableName.replaceAll("[`|']", "");
 	}
 
 	@Override

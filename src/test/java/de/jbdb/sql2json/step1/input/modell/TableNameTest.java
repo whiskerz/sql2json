@@ -5,16 +5,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-import de.jbdb.sql2json.step1.input.modell.TableName;
-
 public class TableNameTest {
+
+	@Test
+	public void constructingWithQuotes_QuotesAreRemoved() throws Exception {
+
+		TableName tableName = new TableName("'" + TEST_TABLE + "'");
+
+		assertThat(tableName.toString()).isEqualTo(TEST_TABLE);
+	}
 
 	@Test
 	public void constructingWithBackticks_BackticksAreRemoved() throws Exception {
 
 		TableName tableName = new TableName("`" + TEST_TABLE + "`");
 
-		assertThat(tableName.get()).isEqualTo(TEST_TABLE);
+		assertThat(tableName.toString()).isEqualTo(TEST_TABLE);
 	}
 
 	@Test
@@ -22,7 +28,7 @@ public class TableNameTest {
 
 		TableName tableName = new TableName(" " + TEST_TABLE + " ");
 
-		assertThat(tableName.get()).isEqualTo(TEST_TABLE);
+		assertThat(tableName.toString()).isEqualTo(TEST_TABLE);
 	}
 
 	@Test

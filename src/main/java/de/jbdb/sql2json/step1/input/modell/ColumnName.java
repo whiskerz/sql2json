@@ -12,10 +12,6 @@ public class ColumnName {
 		this.columnName = purify(columnName);
 	}
 
-	public String get() {
-		return toString();
-	}
-
 	private String purify(String columnName) {
 		String toPurify = columnName;
 

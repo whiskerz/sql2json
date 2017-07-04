@@ -13,21 +13,21 @@ public class ColumnNameTest {
 	public void constructionWithSingleQuotes() throws Exception {
 		ColumnName classUnderTest = new ColumnName("'" + TEST_COLUMN + "'");
 
-		assertThat(classUnderTest.get()).isEqualTo(TEST_COLUMN);
+		assertThat(classUnderTest.toString()).isEqualTo(TEST_COLUMN);
 	}
 
 	@Test
 	public void constructionWithDoubleQuotes() throws Exception {
 		ColumnName classUnderTest = new ColumnName("\"" + TEST_COLUMN + "\"");
 
-		assertThat(classUnderTest.get()).isEqualTo(TEST_COLUMN);
+		assertThat(classUnderTest.toString()).isEqualTo(TEST_COLUMN);
 	}
 
 	@Test
 	public void constructionWithBackticks() throws Exception {
 		ColumnName classUnderTest = new ColumnName("`" + TEST_COLUMN + "`");
 
-		assertThat(classUnderTest.get()).isEqualTo(TEST_COLUMN);
+		assertThat(classUnderTest.toString()).isEqualTo(TEST_COLUMN);
 	}
 
 	@Test
