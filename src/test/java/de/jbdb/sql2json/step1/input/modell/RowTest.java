@@ -11,13 +11,32 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import de.jbdb.sql2json.Sql2JSONTestObjects;
+
 public class RowTest {
 
-	// create row with brackest, w/o brackets, with one value, with multiple values
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
+
+	@Test
+	public void lessValuesThanColumns() throws Exception {
+		expectedException.expect(AssertionError.class);
+		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("fewer values than columns"));
+
+		new Row(new Columns("('TEST_COLUMN1', 'TEST_COLUMN2')"), "('TEST_VALUE1');");
+	}
+
+	@Test
+	public void moreValuesThanColumns() throws Exception {
+		expectedException.expect(AssertionError.class);
+		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("more values than columns"));
+
+		new Row(new Columns("('TEST_COLUMN1', 'TEST_COLUMN2')"), "('TEST_VALUE1', 'TEST_VALUE2', 'TEST_VALUE3');");
+	}
 
 	@Test
 	public void oneValueInOneRow() throws Exception {
-		Row row = new Row("(" + TEST_VALUE1 + ")");
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN), "(" + TEST_VALUE1 + ")");
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();
@@ -30,7 +49,7 @@ public class RowTest {
 
 	@Test
 	public void oneValueInOneRow_NoBrackets() throws Exception {
-		Row row = new Row(TEST_VALUE1);
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN), TEST_VALUE1);
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();
@@ -43,7 +62,7 @@ public class RowTest {
 
 	@Test
 	public void twoValuesInOneRow() throws Exception {
-		Row row = new Row("(" + TEST_VALUE1 + "," + TEST_VALUE1 + ")");
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN), "(" + TEST_VALUE1 + "," + TEST_VALUE1 + ")");
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();
@@ -60,7 +79,8 @@ public class RowTest {
 
 	@Test
 	public void twoValuesInOneRow_OneBracketMissing_Quotes_Whitespace() throws Exception {
-		Row row = new Row("'" + TEST_VALUE1 + "'     ,	'" + TEST_VALUE1 + "  '      )");
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN),
+				"'" + TEST_VALUE1 + "'     ,	'" + TEST_VALUE1 + "  '      )");
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();
@@ -77,7 +97,7 @@ public class RowTest {
 
 	@Test
 	public void gettingTwoUnquotedStrings_WithIndividualBrackets() throws Exception {
-		Row row = new Row("(testValue1),(testValue2)");
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN), "(testValue1),(testValue2)");
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();
@@ -94,7 +114,8 @@ public class RowTest {
 
 	@Test
 	public void gettingTwoQuotedStringWithInnerComma() throws Exception {
-		Row row = new Row("('" + TEST_VALUE1 + "," + TEST_VALUE1 + "','" + TEST_VALUE1 + "," + TEST_VALUE1 + "'");
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN),
+				"('" + TEST_VALUE1 + "," + TEST_VALUE1 + "','" + TEST_VALUE1 + "," + TEST_VALUE1 + "'");
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();
@@ -111,8 +132,8 @@ public class RowTest {
 
 	@Test
 	public void gettingLongAndMixedValues_WithInnerCommaAndWithout_WithQuotesAndWithout() throws Exception {
-		Row row = new Row("'" + TEST_VALUE1 + "," + TEST_VALUE1 + "'," + TEST_VALUE1 + "," + TEST_VALUE1 + ",'"
-				+ TEST_VALUE1 + "'");
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN), "'" + TEST_VALUE1 + "," + TEST_VALUE1 + "',"
+				+ TEST_VALUE1 + "," + TEST_VALUE1 + ",'" + TEST_VALUE1 + "'");
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();
@@ -132,20 +153,18 @@ public class RowTest {
 		assertThat(value4.toString()).isEqualTo(TEST_VALUE1);
 	}
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
 	@Test
 	public void missingClosingQuote() throws Exception {
 		expectedException.expect(IllegalArgumentException.class);
 		expectedException.expectMessage(CoreMatchers.containsString("don't know how to interpret its value"));
 
-		new Row("'" + TEST_VALUE1);
+		new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN), "'" + TEST_VALUE1);
 	}
 
 	@Test
 	public void oneValue_withBrackets_withQuotes_withWhiteSpace() throws Exception {
-		Row row = new Row("       (       	'" + TEST_VALUE1 + "'	)		");
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN),
+				"       (       	'" + TEST_VALUE1 + "'	)		");
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();
@@ -158,7 +177,8 @@ public class RowTest {
 
 	@Test
 	public void twoValues_withBrackes_withoutQuotes_withSemicolon() throws Exception {
-		Row row = new Row("  (" + TEST_VALUE1 + ", " + TEST_VALUE2 + ");");
+		Row row = new Row(new Columns(Sql2JSONTestObjects.TEST_COLUMN),
+				"  (" + TEST_VALUE1 + ", " + TEST_VALUE2 + ");");
 
 		List<Value> values = row.getValues();
 		assertThat(values).describedAs("row values").isNotNull();

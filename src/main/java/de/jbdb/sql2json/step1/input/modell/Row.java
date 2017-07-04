@@ -7,7 +7,7 @@ public class Row {
 
 	private List<Value> valueList;
 
-	public Row(String values) {
+	public Row(Columns columns, String values) {
 		String parameter = values.trim();
 
 		if (parameter.startsWith("(")) {

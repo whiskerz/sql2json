@@ -63,7 +63,7 @@ public class InsertStatement {
 	}
 
 	private void setValueRowsFrom(String valueRowsString) {
-		valueRows = new Rows(valueRowsString);
+		valueRows = new Rows(columns, valueRowsString);
 	}
 
 	public String toJSON() {
