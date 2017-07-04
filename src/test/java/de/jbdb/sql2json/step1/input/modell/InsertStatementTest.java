@@ -55,7 +55,7 @@ public class InsertStatementTest {
 	@Test
 	public void constructorWithNoValues() throws Exception {
 		expectedException.expect(AssertionError.class);
-		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("missing values"));
+		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("values are missing"));
 
 		new InsertStatement("INSERT INTO 'TEST_TABLE'('TEST_COLUMN') VALUES ");
 	}
@@ -63,7 +63,8 @@ public class InsertStatementTest {
 	@Test
 	public void constructorWithLessValuesThanColumns() throws Exception {
 		expectedException.expect(AssertionError.class);
-		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("fewer values than columns"));
+		expectedException.expectMessage(
+				org.hamcrest.CoreMatchers.containsString("number of values does not match number of columns"));
 
 		new InsertStatement("INSERT INTO 'TEST_TABLE'('TEST_COLUMN1', 'TEST_COLUMN2') VALUES ('TEST_VALUE1');");
 	}
@@ -71,7 +72,8 @@ public class InsertStatementTest {
 	@Test
 	public void constructorWithMoreValuesThanColumns() throws Exception {
 		expectedException.expect(AssertionError.class);
-		expectedException.expectMessage(org.hamcrest.CoreMatchers.containsString("more values than columns"));
+		expectedException.expectMessage(
+				org.hamcrest.CoreMatchers.containsString("number of values does not match number of columns"));
 
 		new InsertStatement(
 				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN1', 'TEST_COLUMN2') VALUES ('TEST_VALUE1', 'TEST_VALUE2', 'TEST_VALUE3');");
@@ -84,19 +86,21 @@ public class InsertStatementTest {
 
 		assertThat(insertStatement.getTableName()).isEqualTo(new TableName(TEST_TABLE));
 		assertThat(insertStatement.getColumnNames()).isNotNull();
-		assertThat(insertStatement.getColumnNames()).hasSize(1);
+		assertThat(insertStatement.getColumnNames()).hasSize(2);
 		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(new ColumnName(TEST_COLUMN));
+		assertThat(insertStatement.getColumnNames().get(1)).isEqualTo(new ColumnName(TEST_COLUMN));
 
 		List<Row> rows = insertStatement.getValueRows();
 		assertThat(rows).describedAs("Rows").isNotNull();
 		assertThat(rows).describedAs("Rows").isNotEmpty();
 		assertThat(rows).hasSize(1);
 
-		List<Value> values = rows.get(0).getValues();
+		List<ColumnValue> values = rows.get(0).getValues();
 		assertThat(values).describedAs("Values").isNotNull();
 		assertThat(values).describedAs("Values").isNotEmpty();
 		assertThat(values).hasSize(2);
-		assertThat(values).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
+		assertThat(values).contains(new ColumnValue(new ColumnName(TEST_COLUMN), TEST_VALUE1),
+				new ColumnValue(new ColumnName(TEST_COLUMN), TEST_VALUE2));
 	}
 
 	@Test
@@ -114,11 +118,11 @@ public class InsertStatementTest {
 		assertThat(rows).describedAs("Rows").isNotEmpty();
 		assertThat(rows).hasSize(1);
 
-		List<Value> values = rows.get(0).getValues();
+		List<ColumnValue> values = rows.get(0).getValues();
 		assertThat(values).describedAs("Values").isNotNull();
 		assertThat(values).describedAs("Values").isNotEmpty();
 		assertThat(values).hasSize(1);
-		assertThat(values).contains(new Value(TEST_VALUE1));
+		assertThat(values).contains(new ColumnValue(new ColumnName(TEST_COLUMN), TEST_VALUE1));
 	}
 
 	@Test
@@ -178,25 +182,39 @@ public class InsertStatementTest {
 		assertThat(rows).hasSize(3);
 
 		assertThat(rows.stream().map(row -> row.getValues().get(0)).collect(Collectors.toList()))
-				.containsExactlyInAnyOrder(new Value(postId1), new Value(postId2), new Value(postId3));
+				.containsExactlyInAnyOrder(new ColumnValue(new ColumnName(TEST_COLUMN), postId1),
+						new ColumnValue(new ColumnName(TEST_COLUMN), postId2),
+						new ColumnValue(new ColumnName(TEST_COLUMN), postId3));
 
 		assertThat(rows.stream().map(row -> row.getValues().get(1)).collect(Collectors.toList()))
-				.containsExactlyInAnyOrder(new Value(topicId1), new Value(topicId2), new Value(topicId3));
+				.containsExactlyInAnyOrder(new ColumnValue(new ColumnName(TEST_COLUMN), topicId1),
+						new ColumnValue(new ColumnName(TEST_COLUMN), topicId2),
+						new ColumnValue(new ColumnName(TEST_COLUMN), topicId3));
 
 		assertThat(rows.stream().map(row -> row.getValues().get(2)).collect(Collectors.toList()))
-				.containsExactlyInAnyOrder(new Value(postDatum1), new Value(postDatum2), new Value(postDatum3));
+				.containsExactlyInAnyOrder(new ColumnValue(new ColumnName(TEST_COLUMN), postDatum1),
+						new ColumnValue(new ColumnName(TEST_COLUMN), postDatum2),
+						new ColumnValue(new ColumnName(TEST_COLUMN), postDatum3));
 
 		assertThat(rows.stream().map(row -> row.getValues().get(3)).collect(Collectors.toList()))
-				.containsExactlyInAnyOrder(new Value(postAutor1), new Value(postAutor2), new Value(postAutor3));
+				.containsExactlyInAnyOrder(new ColumnValue(new ColumnName(TEST_COLUMN), postAutor1),
+						new ColumnValue(new ColumnName(TEST_COLUMN), postAutor2),
+						new ColumnValue(new ColumnName(TEST_COLUMN), postAutor3));
 
 		assertThat(rows.stream().map(row -> row.getValues().get(4)).collect(Collectors.toList()))
-				.containsExactlyInAnyOrder(new Value(postText1), new Value(postText2), new Value(postText3));
+				.containsExactlyInAnyOrder(new ColumnValue(new ColumnName(TEST_COLUMN), postText1),
+						new ColumnValue(new ColumnName(TEST_COLUMN), postText2),
+						new ColumnValue(new ColumnName(TEST_COLUMN), postText3));
 
 		assertThat(rows.stream().map(row -> row.getValues().get(5)).collect(Collectors.toList()))
-				.containsExactlyInAnyOrder(new Value(ip1), new Value(ip2), new Value(ip3));
+				.containsExactlyInAnyOrder(new ColumnValue(new ColumnName(TEST_COLUMN), ip1),
+						new ColumnValue(new ColumnName(TEST_COLUMN), ip2),
+						new ColumnValue(new ColumnName(TEST_COLUMN), ip3));
 
 		assertThat(rows.stream().map(row -> row.getValues().get(6)).collect(Collectors.toList()))
-				.containsExactlyInAnyOrder(new Value(edit1), new Value(edit2), new Value(edit3));
+				.containsExactlyInAnyOrder(new ColumnValue(new ColumnName(TEST_COLUMN), edit1),
+						new ColumnValue(new ColumnName(TEST_COLUMN), edit2),
+						new ColumnValue(new ColumnName(TEST_COLUMN), edit3));
 	}
 
 	@Test
@@ -208,5 +226,31 @@ public class InsertStatementTest {
 		String jsonString = classUnderTest.toJSON();
 
 		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[{\"TEST_COLUMN\":\"TEST_VALUE\"}]}");
+	}
+
+	@Test
+	public void toJSON_TwoValues() throws Exception {
+
+		InsertStatement classUnderTest = new InsertStatement(
+				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN1','TEST_COLUMN2') VALUES ('TEST_VALUE1','TEST_VALUE2);");
+
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString)
+				.isEqualTo("{\"TEST_TABLE\":[{\"TEST_COLUMN1\":\"TEST_VALUE1\",\"TEST_COLUMN2\":\"TEST_VALUE2\"}]}");
+	}
+
+	@Test
+	public void toJSON_TwoRowsWithTwoValuesEach() throws Exception {
+
+		InsertStatement classUnderTest = new InsertStatement(
+				"INSERT INTO 'TEST_TABLE'('TEST_COLUMN1','TEST_COLUMN2') VALUES ('TEST_VALUE1','TEST_VALUE2),('TEST_VALUE3','TEST_VALUE4);");
+
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[" //
+				+ "{\"TEST_COLUMN1\":\"TEST_VALUE1\",\"TEST_COLUMN2\":\"TEST_VALUE2\"}," //
+				+ "{\"TEST_COLUMN1\":\"TEST_VALUE3\",\"TEST_COLUMN2\":\"TEST_VALUE4\"}" //
+				+ "]}"); //
 	}
 }

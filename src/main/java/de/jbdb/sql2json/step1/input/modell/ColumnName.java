@@ -13,7 +13,7 @@ public class ColumnName {
 	}
 
 	public String get() {
-		return columnName;
+		return toString();
 	}
 
 	private String purify(String columnName) {

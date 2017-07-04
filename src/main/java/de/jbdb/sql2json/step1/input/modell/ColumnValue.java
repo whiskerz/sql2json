@@ -1,26 +1,18 @@
 package de.jbdb.sql2json.step1.input.modell;
 
-public class Value {
+public class ColumnValue {
 
-	private String value;
+	private ColumnName columnName;
+	private Value value;
 
-	public Value(String valueString) {
-		String parameter = valueString.trim();
-
-		if (parameter.startsWith("'")) {
-			parameter = parameter.substring(1);
-		}
-
-		if (parameter.endsWith("'")) {
-			parameter = parameter.substring(0, parameter.length() - 1);
-		}
-
-		this.value = parameter.trim();
+	public ColumnValue(ColumnName columnName, String valueString) {
+		this.columnName = columnName;
+		this.value = new Value(valueString);
 	}
 
 	@Override
 	public String toString() {
-		return value;
+		return "\"" + columnName.toString() + "\":\"" + value.toString() + "\"";
 	}
 
 	@Override
@@ -39,7 +31,7 @@ public class Value {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Value other = (Value) obj;
+		ColumnValue other = (ColumnValue) obj;
 		if (value == null) {
 			if (other.value != null)
 				return false;

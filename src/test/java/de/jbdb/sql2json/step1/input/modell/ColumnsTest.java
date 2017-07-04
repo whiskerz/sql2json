@@ -44,6 +44,16 @@ public class ColumnsTest {
 		assertColumns(columns, 2);
 	}
 
+	@Test
+	public void getNamesReturnsCopy() throws Exception {
+		Columns columns = new Columns(TEST_COLUMN + "," + TEST_COLUMN + ")    ");
+
+		List<ColumnName> copy1 = columns.getNames();
+		List<ColumnName> copy2 = columns.getNames();
+
+		assertThat(copy1).isNotSameAs(copy2);
+	}
+
 	private void assertColumns(Columns columns, int size) {
 		List<ColumnName> names = columns.getNames();
 

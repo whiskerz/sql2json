@@ -32,6 +32,18 @@ public class Rows {
 		return rowList;
 	}
 
+	public String toJSON() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		for (Row row : rowList) {
+			builder.append(row.toJSON());
+			builder.append(",");
+		}
+		builder.replace(builder.length() - 1, builder.length(), "]");
+
+		return builder.toString();
+	}
+
 	@Override
 	public String toString() {
 		return "Rows [rowList=" + rowList + "]";

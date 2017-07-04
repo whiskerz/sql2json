@@ -15,10 +15,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.jbdb.sql2json.step1.input.modell.ColumnName;
+import de.jbdb.sql2json.step1.input.modell.ColumnValue;
 import de.jbdb.sql2json.step1.input.modell.InsertStatement;
 import de.jbdb.sql2json.step1.input.modell.Row;
 import de.jbdb.sql2json.step1.input.modell.TableName;
-import de.jbdb.sql2json.step1.input.modell.Value;
 
 public class ScanResultTest {
 
@@ -78,24 +78,28 @@ public class ScanResultTest {
 		assertThat(insertStatement).isNotNull();
 		assertThat(insertStatement.getTableName()).isEqualTo(new TableName(TEST_TABLE));
 		assertThat(insertStatement.getColumnNames()).isNotNull();
-		assertThat(insertStatement.getColumnNames()).hasSize(1);
+		assertThat(insertStatement.getColumnNames()).hasSize(2);
 		assertThat(insertStatement.getColumnNames().get(0)).isEqualTo(new ColumnName(TEST_COLUMN));
+		assertThat(insertStatement.getColumnNames().get(1)).isEqualTo(new ColumnName(TEST_COLUMN));
 
 		List<Row> rows = insertStatement.getValueRows();
 		assertThat(rows).describedAs("Rows").isNotNull();
 		assertThat(rows).describedAs("Rows").isNotEmpty();
 		assertThat(rows).hasSize(2);
 
-		List<Value> values1 = rows.get(0).getValues();
+		List<ColumnValue> values1 = rows.get(0).getValues();
 		assertThat(values1).describedAs("Values").isNotNull();
 		assertThat(values1).describedAs("Values").isNotEmpty();
 		assertThat(values1).hasSize(2);
-		assertThat(values1).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
+		assertThat(values1).contains(new ColumnValue(new ColumnName(TEST_COLUMN), TEST_VALUE1),
+				new ColumnValue(new ColumnName(TEST_COLUMN), TEST_VALUE2));
 
-		List<Value> values2 = rows.get(0).getValues();
+		List<ColumnValue> values2 = rows.get(0).getValues();
 		assertThat(values2).describedAs("Values").isNotNull();
 		assertThat(values2).describedAs("Values").isNotEmpty();
 		assertThat(values2).hasSize(2);
-		assertThat(values2).contains(new Value(TEST_VALUE1), new Value(TEST_VALUE2));
+		assertThat(values2).contains(new ColumnValue(new ColumnName(TEST_COLUMN), TEST_VALUE1),
+				new ColumnValue(new ColumnName(TEST_COLUMN), TEST_VALUE2));
 	}
+
 }

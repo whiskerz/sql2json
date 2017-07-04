@@ -3,6 +3,7 @@ package de.jbdb.sql2json.step1.input;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTINSERT;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTJSON;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -14,6 +15,7 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -33,6 +35,10 @@ public class Sql2JSONServiceTest {
 
 		final File tempFile = tempFolder.newFile("tempFile.sql");
 		FileUtils.writeStringToFile(tempFile, String.join("\n", TESTINSERT), Charset.defaultCharset());
+
+		ScanResult scanResult = new ScanResult();
+		// scanResult.add
+		when(directoryScanner.scanDirectories(Mockito.anyString())).thenReturn(scanResult);
 
 		String resultJson = classUnderTest.convertInsertFilesToJson("tmpDirectory");
 

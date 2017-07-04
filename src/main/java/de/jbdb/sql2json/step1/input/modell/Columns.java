@@ -24,7 +24,7 @@ public class Columns {
 	}
 
 	public List<ColumnName> getNames() {
-		return names;
+		return new ArrayList<>(names);
 	}
 
 	@Override
