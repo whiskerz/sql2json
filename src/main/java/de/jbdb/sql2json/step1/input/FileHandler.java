@@ -20,4 +20,7 @@ public class FileHandler {
 		return Files.lines(path);
 	}
 
+	public Path write(String path, String text) throws IOException {
+		return Files.write(Paths.get(path), text.getBytes());
+	}
 }
