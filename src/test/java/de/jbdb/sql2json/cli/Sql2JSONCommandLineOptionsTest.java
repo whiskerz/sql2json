@@ -1,6 +1,7 @@
 package de.jbdb.sql2json.cli;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -27,5 +28,10 @@ public class Sql2JSONCommandLineOptionsTest {
 
 		assertThat(options.getInputDirectory()).isEqualTo("inputDir");
 		assertThat(options.getOutputDirectory()).isEqualTo("outputDir");
+	}
+
+	@Test
+	public void requestingHelpMeansNoExceptionHelpflagTrue() throws Exception {
+		fail("Implement me!");
 	}
 }
