@@ -28,7 +28,7 @@ public class Sql2JSONServiceTest {
 	private SqlInsertDirectoryScanner directoryScanner;
 
 	@Mock
-	private FileHandler fileHandler;
+	private FileHandlerService fileHandler;
 
 	@InjectMocks
 	private Sql2JSONService classUnderTest;

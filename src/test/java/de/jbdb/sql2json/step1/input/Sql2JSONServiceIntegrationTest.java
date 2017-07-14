@@ -3,7 +3,6 @@ package de.jbdb.sql2json.step1.input;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTINSERT;
 import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTJSON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -13,41 +12,36 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(MockitoJUnitRunner.class)
+import de.jbdb.sql2json.cli.Sql2JSONCommandLine;
+
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = Sql2JSONCommandLine.class)
 public class Sql2JSONServiceIntegrationTest {
 
 	@Rule
 	public TemporaryFolder tempFolder = new TemporaryFolder();
 
-	@Mock
-	private SqlInsertDirectoryScanner directoryScanner;
-
-	@InjectMocks
+	@Autowired
 	private Sql2JSONService classUnderTest;
 
 	@Test
-	public void simpleInsert() throws Exception {
+	public void simpleSpringSetupTest() throws Exception {
 
-		final File tempFile = tempFolder.newFile("tempFile.sql");
-		FileUtils.writeStringToFile(tempFile, TESTINSERT, Charset.defaultCharset());
-
-		ScanResult scanResult = new ScanResult();
-		// scanResult.add
-		when(directoryScanner.scanDirectories(Mockito.anyString())).thenReturn(scanResult);
-
-		String resultJson = classUnderTest.convertInsertFilesToJson("tmpDirectory");
-
-		assertThat(resultJson).isEqualTo(TESTJSON);
+		assertThat(classUnderTest).isNotNull();
 	}
 
-	// TODO Multiple tables in directory structure
+	@Test
+	public void simpleInsert_HappyPath() throws Exception {
 
-	// TODO Error Handling
-	// scanResult.getResultStatus();
+		final File tempFile1 = tempFolder.newFile("tempFile1.sql");
+		FileUtils.writeStringToFile(tempFile1, TESTINSERT, Charset.defaultCharset());
 
+		String resultJson = classUnderTest.convertInsertFilesToJson(tempFolder.getRoot().getAbsolutePath());
+
+		assertThat(resultJson).isEqualTo("[" + TESTJSON + "]");
+	}
 }

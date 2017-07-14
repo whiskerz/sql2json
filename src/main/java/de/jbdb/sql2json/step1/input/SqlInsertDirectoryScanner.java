@@ -9,9 +9,11 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import de.jbdb.sql2json.step1.input.modell.InsertStatement;
 
+@Service
 public class SqlInsertDirectoryScanner {
 	private enum State {
 		NO_INSERT, INSERT
@@ -29,7 +31,7 @@ public class SqlInsertDirectoryScanner {
 	private static final String SQL_EXTENSION = ".sql";
 
 	// SERVICES
-	private FileHandler fileHandler;
+	private FileHandlerService fileHandler;
 
 	// ATTRIBUTES
 	private State state = State.NO_INSERT;
@@ -38,7 +40,7 @@ public class SqlInsertDirectoryScanner {
 
 	// CONSTRUCTOR
 	@Autowired(required = true)
-	public SqlInsertDirectoryScanner(FileHandler fileHandler) {
+	public SqlInsertDirectoryScanner(FileHandlerService fileHandler) {
 		if (fileHandler == null) {
 			throwIllegalArgument("A service for file handling is required for this scanner.");
 		}

@@ -6,7 +6,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class FileHandler {
+import org.springframework.stereotype.Service;
+
+@Service
+public class FileHandlerService {
 
 	public Path get(String first, String... more) {
 		return Paths.get(first, more);

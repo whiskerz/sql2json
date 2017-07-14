@@ -14,10 +14,10 @@ import de.jbdb.sql2json.step1.input.modell.TableName;
 public class Sql2JSONService {
 
 	private SqlInsertDirectoryScanner directoryScanner;
-	private FileHandler fileHandler;
+	private FileHandlerService fileHandler;
 
 	@Autowired(required = true)
-	public Sql2JSONService(SqlInsertDirectoryScanner directoryScanner, FileHandler fileHandler) {
+	public Sql2JSONService(SqlInsertDirectoryScanner directoryScanner, FileHandlerService fileHandler) {
 		this.directoryScanner = directoryScanner;
 		this.fileHandler = fileHandler;
 	}

@@ -41,7 +41,7 @@ public class SqlInsertDirectoryScannerTest {
 
 	@Before
 	public void before() {
-		FileHandler fileHandler = new FileHandler();
+		FileHandlerService fileHandler = new FileHandlerService();
 		classUnderTest = new SqlInsertDirectoryScanner(fileHandler);
 	}
 
