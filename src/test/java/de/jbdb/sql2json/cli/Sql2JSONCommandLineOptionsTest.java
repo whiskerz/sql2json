@@ -1,11 +1,8 @@
 package de.jbdb.sql2json.cli;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
-
-import joptsimple.OptionException;
 
 public class Sql2JSONCommandLineOptionsTest {
 
@@ -13,12 +10,6 @@ public class Sql2JSONCommandLineOptionsTest {
 	public void testMain_NullArguments() throws Exception {
 
 		Sql2JSONCommandLineOptions.parseFrom(null);
-	}
-
-	@Test(expected = OptionException.class)
-	public void testMain_EmptyArguments() throws Exception {
-
-		Sql2JSONCommandLineOptions.parseFrom(new String[] {});
 	}
 
 	@Test
@@ -32,6 +23,21 @@ public class Sql2JSONCommandLineOptionsTest {
 
 	@Test
 	public void requestingHelpMeansNoExceptionHelpflagTrue() throws Exception {
-		fail("Implement me!");
+
+		Sql2JSONCommandLineOptions options = Sql2JSONCommandLineOptions.parseFrom(new String[] { "-help" });
+
+		assertThat(options.isHelpRequested()).isEqualTo(true);
+		assertThat(options.getInputDirectory()).isNull();
+		assertThat(options.getOutputDirectory()).isNull();
+	}
+
+	@Test
+	public void noParametersMeansNoExceptionHelpflagTrue() throws Exception {
+
+		Sql2JSONCommandLineOptions options = Sql2JSONCommandLineOptions.parseFrom(new String[] {});
+
+		assertThat(options.isHelpRequested()).isEqualTo(true);
+		assertThat(options.getInputDirectory()).isNull();
+		assertThat(options.getOutputDirectory()).isNull();
 	}
 }

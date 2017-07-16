@@ -1,7 +1,5 @@
 package de.jbdb.sql2json.cli;
 
-import static java.lang.System.exit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
@@ -11,12 +9,24 @@ import de.jbdb.sql2json.step1.input.Sql2JSONService;
 @Controller
 public class Sql2JSONCommandLineRunner implements CommandLineRunner {
 
-	@Autowired
 	private Sql2JSONService sql2JSONService;
+	private SystemService systemService;
+
+	@Autowired(required = true)
+	public Sql2JSONCommandLineRunner(Sql2JSONService sql2JSONService, SystemService systemService) {
+		this.sql2JSONService = sql2JSONService;
+		this.systemService = systemService;
+	}
 
 	@Override
 	public void run(String... args) throws Exception {
 		Sql2JSONCommandLineOptions commandLineOptions = Sql2JSONCommandLineOptions.parseFrom(args);
+
+		if (commandLineOptions.isHelpRequested()) {
+			systemService.println(commandLineOptions.getHelpScreen());
+			systemService.exit(0);
+			return;
+		}
 
 		sql2JSONService.convertInsertFilesToJson(commandLineOptions.getInputDirectory());
 
@@ -31,7 +41,7 @@ public class Sql2JSONCommandLineRunner implements CommandLineRunner {
 		// Since we run in a thread if we don't exit explicitly we will run
 		// forever
 
-		exit(0);
+		systemService.exit(0);
 	}
 
 }
