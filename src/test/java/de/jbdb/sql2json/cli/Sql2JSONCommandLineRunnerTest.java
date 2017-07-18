@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import de.jbdb.sql2json.step1.input.FileHandlerService;
 import de.jbdb.sql2json.step1.input.Sql2JSONService;
 
 public class Sql2JSONCommandLineRunnerTest {
@@ -15,7 +16,7 @@ public class Sql2JSONCommandLineRunnerTest {
 
 		SystemService outServiceMock = mock(SystemService.class);
 		Sql2JSONCommandLineRunner classUnderTest = new Sql2JSONCommandLineRunner(mock(Sql2JSONService.class),
-				outServiceMock);
+				outServiceMock, mock(FileHandlerService.class));
 
 		classUnderTest.run(new String[] {});
 

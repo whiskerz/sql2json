@@ -4,15 +4,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile(Sql2JSONCommandLine.PROD_PROFILE)
-public class SystemService {
+@Profile(Sql2JSONCommandLine.TEST_PROFILE)
+class SystemServiceStub extends SystemService {
 
-	public void println(String string) {
-		System.out.println(string);
-	}
-
+	@Override
 	public void exit(int status) {
-		System.exit(status);
+		System.out.println("Called exit with status: " + status);
 	}
 
 }
