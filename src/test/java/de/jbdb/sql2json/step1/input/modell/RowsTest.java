@@ -88,7 +88,7 @@ public class RowsTest {
 
 		String jsonString = classUnderTest.toJSON();
 
-		assertThat(jsonString).isEqualTo("[{\"" + TEST_COLUMN + "\":\"TEST_VALUE1\"}]");
+		assertThat(jsonString).isEqualTo("[\n{\"" + TEST_COLUMN + "\":\"TEST_VALUE1\"}\n]");
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class RowsTest {
 		String jsonString = classUnderTest.toJSON();
 
 		assertThat(jsonString)
-				.isEqualTo("[{\"" + TEST_COLUMN + "\":\"TEST_VALUE1\",\"" + TEST_COLUMN + "\":\"TEST_VALUE2\"}]");
+				.isEqualTo("[\n{\"" + TEST_COLUMN + "\":\"TEST_VALUE1\",\"" + TEST_COLUMN + "\":\"TEST_VALUE2\"}\n]");
 	}
 
 	@Test
@@ -110,9 +110,9 @@ public class RowsTest {
 
 		String jsonString = classUnderTest.toJSON();
 
-		assertThat(jsonString).isEqualTo("[" //
-				+ "{\"" + TEST_COLUMN + "\":\"TEST_VALUE1\",\"" + TEST_COLUMN + "\":\"TEST_VALUE2\"}," //
-				+ "{\"" + TEST_COLUMN + "\":\"TEST_VALUE3\",\"" + TEST_COLUMN + "\":\"TEST_VALUE4\"}" //
+		assertThat(jsonString).isEqualTo("[\n" //
+				+ "{\"" + TEST_COLUMN + "\":\"TEST_VALUE1\",\"" + TEST_COLUMN + "\":\"TEST_VALUE2\"},\n" //
+				+ "{\"" + TEST_COLUMN + "\":\"TEST_VALUE3\",\"" + TEST_COLUMN + "\":\"TEST_VALUE4\"}\n" //
 				+ "]"); //
 	}
 

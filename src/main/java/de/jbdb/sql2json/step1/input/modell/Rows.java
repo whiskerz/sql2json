@@ -28,12 +28,12 @@ public class Rows {
 
 	public String toJSON() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("[");
+		builder.append("[").append("\n");
 		for (Row row : rowList) {
 			builder.append(row.toJSON());
-			builder.append(",");
+			builder.append(",\n");
 		}
-		builder.replace(builder.length() - 1, builder.length(), "]");
+		builder.replace(builder.length() - 2, builder.length(), "\n]");
 
 		return builder.toString();
 	}

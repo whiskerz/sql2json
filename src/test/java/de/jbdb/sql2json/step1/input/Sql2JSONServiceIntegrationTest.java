@@ -44,6 +44,6 @@ public class Sql2JSONServiceIntegrationTest {
 
 		String resultJson = classUnderTest.convertInsertFilesToJson(tempFolder.getRoot().getAbsolutePath());
 
-		assertThat(resultJson).isEqualTo("[" + TESTJSON + "]");
+		assertThat(resultJson).isEqualTo("[\n" + TESTJSON + "\n]");
 	}
 }

@@ -50,6 +50,6 @@ public class Sql2JSONCommandLineRunnerIntegrationTest {
 		assertThat(fileList).hasSize(1);
 
 		String fileContents = FileUtils.readFileToString(fileList[0], Charset.defaultCharset());
-		assertThat(fileContents).isEqualTo("[" + TESTJSON + "]");
+		assertThat(fileContents).isEqualTo("[\n" + TESTJSON + "\n]");
 	}
 }

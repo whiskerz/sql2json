@@ -39,12 +39,12 @@ public class Sql2JSONService {
 
 		Map<TableName, InsertStatement> allResults = scanResult.getAllResults();
 		StringBuilder builder = new StringBuilder();
-		builder.append("[");
+		builder.append("[\n");
 		for (InsertStatement insertStatement : allResults.values()) {
 			builder.append(insertStatement.toJSON());
-			builder.append(",");
+			builder.append(",\n");
 		}
-		builder.replace(builder.length() - 1, builder.length(), "]");
+		builder.replace(builder.length() - 2, builder.length(), "\n]");
 
 		return builder.toString();
 	}

@@ -225,7 +225,7 @@ public class InsertStatementTest {
 
 		String jsonString = classUnderTest.toJSON();
 
-		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[{\"TEST_COLUMN\":\"TEST_VALUE1\"}]}");
+		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[\n{\"TEST_COLUMN\":\"TEST_VALUE1\"}\n]}");
 	}
 
 	@Test
@@ -236,8 +236,8 @@ public class InsertStatementTest {
 
 		String jsonString = classUnderTest.toJSON();
 
-		assertThat(jsonString)
-				.isEqualTo("{\"TEST_TABLE\":[{\"TEST_COLUMN1\":\"TEST_VALUE1\",\"TEST_COLUMN2\":\"TEST_VALUE2\"}]}");
+		assertThat(jsonString).isEqualTo(
+				"{\"TEST_TABLE\":[\n{\"TEST_COLUMN1\":\"TEST_VALUE1\",\"TEST_COLUMN2\":\"TEST_VALUE2\"}\n]}");
 	}
 
 	@Test
@@ -248,9 +248,9 @@ public class InsertStatementTest {
 
 		String jsonString = classUnderTest.toJSON();
 
-		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[" //
-				+ "{\"TEST_COLUMN1\":\"TEST_VALUE1\",\"TEST_COLUMN2\":\"TEST_VALUE2\"}," //
+		assertThat(jsonString).isEqualTo("{\"TEST_TABLE\":[\n" //
+				+ "{\"TEST_COLUMN1\":\"TEST_VALUE1\",\"TEST_COLUMN2\":\"TEST_VALUE2\"},\n" //
 				+ "{\"TEST_COLUMN1\":\"TEST_VALUE3\",\"TEST_COLUMN2\":\"TEST_VALUE4\"}" //
-				+ "]}"); //
+				+ "\n]}"); //
 	}
 }

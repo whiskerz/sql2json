@@ -42,7 +42,7 @@ public class Sql2JSONServiceTest {
 
 		String resultJson = classUnderTest.convertInsertFilesToJson("tmpDirectory");
 
-		assertThat(resultJson).isEqualTo("[" + TESTJSON + "]");
+		assertThat(resultJson).isEqualTo("[\n" + TESTJSON + "\n]");
 	}
 
 	@Test
@@ -60,6 +60,7 @@ public class Sql2JSONServiceTest {
 			jsonParser.next();
 		}
 		assertThat(resultJson).contains(TESTJSON);
+		assertThat(resultJson).contains(",\n");
 		assertThat(resultJson).contains(TESTJSON.replace(TEST_TABLE, "TEST_TABLE2"));
 	}
 

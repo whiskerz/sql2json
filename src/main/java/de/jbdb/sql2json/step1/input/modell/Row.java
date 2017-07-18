@@ -10,9 +10,18 @@ import java.util.Stack;
 
 public class Row {
 
+	private enum State {
+		OUTSIDE, INSIDE
+	}
+
 	private List<ColumnValue> valueList;
+	private final Columns columns;
+	private final String values;
 
 	public Row(Columns columns, String values) {
+		this.columns = columns;
+		this.values = values;
+
 		String parameter = values.trim();
 
 		assertThat(parameter).as("The value string is empty, all values are missing.").isNotEmpty();
@@ -39,29 +48,63 @@ public class Row {
 
 		valueList = new ArrayList<>();
 
-		// This is done like it is because it was the first obvious solution. Did not want to spend to much time on it
+		State state = State.OUTSIDE;
+		StringBuilder collector = null;
+		// The first solution did not allow for good handling of the quoted single quote (''). Using a simple state
+		// machine instead.
 		while (!parameter.isEmpty()) {
-			if (parameter.startsWith("'")) {
+			switch (state) {
+			case OUTSIDE:
+				if (parameter.startsWith("'''")) {
+					state = State.INSIDE;
+					collector = new StringBuilder();
+					parameter = parameter.substring(1);
+					continue;
+				}
+				if (parameter.startsWith("''")) {
+					valueList.add(new ColumnValue(exceptionSafePop(columnsStack), ""));
+					parameter = parameter.substring(2);
+					continue;
+				}
+				if (parameter.startsWith("'")) {
+					state = State.INSIDE;
+					collector = new StringBuilder();
+					parameter = parameter.substring(1);
+					continue;
+				}
+				if (parameter.startsWith(",")) {
+					parameter = parameter.substring(1).trim();
+					continue;
+				}
+				int nextComma = parameter.indexOf(",");
+				nextComma = nextComma >= 0 ? nextComma : parameter.length();
+				String valueString = parameter.substring(0, nextComma).trim();
+				valueList.add(new ColumnValue(exceptionSafePop(columnsStack), valueString));
+				parameter = parameter.substring(nextComma);
+				break;
+			case INSIDE:
+				if (parameter.startsWith("''")) {
+					collector.append("'");
+					parameter = parameter.substring(2);
+					continue;
+				}
+				if (parameter.startsWith("'")) {
+					state = State.OUTSIDE;
+					valueList.add(new ColumnValue(exceptionSafePop(columnsStack), collector.toString()));
+					collector = null;
+					parameter = parameter.substring(1).trim();
+					continue;
+				}
 				int closingQuoteIndex = parameter.indexOf("'", 1);
 				if (closingQuoteIndex < 0) {
 					throw new IllegalArgumentException(
 							"Could not parse input. It seems to be malformed and is missing a closing quote, I don't know how to interpret its values without that. Here is your input: "
 									+ values);
 				}
-				valueList.add(
-						new ColumnValue(exceptionSafePop(columnsStack), parameter.substring(1, closingQuoteIndex)));
-				parameter = parameter.substring(closingQuoteIndex + 1).trim();
-				continue;
+				collector.append(parameter.charAt(0));
+				parameter = parameter.substring(1);
+				break;
 			}
-			if (parameter.startsWith(",")) {
-				parameter = parameter.substring(1).trim();
-				continue;
-			}
-
-			int nextComma = parameter.indexOf(",");
-			nextComma = nextComma >= 0 ? nextComma : parameter.length();
-			valueList.add(new ColumnValue(exceptionSafePop(columnsStack), parameter.substring(0, nextComma).trim()));
-			parameter = parameter.substring(nextComma);
 		}
 
 		assertThat(valueList)
@@ -74,9 +117,10 @@ public class Row {
 		try {
 			return columnsStack.pop();
 		} catch (EmptyStackException emptyStackException) {
-			throw new AssertionError(
-					"It appears that the number of values does not match number of columns.\nValues: %d\nColumns: %d",
-					emptyStackException);
+			String message = String.format(
+					"It appears that the number of values does not match number of columns. Stack was empty.\nColumns:%s\nValues:%s",
+					columns.toString(), values);
+			throw new AssertionError(message, emptyStackException);
 		}
 	}
 
@@ -88,7 +132,13 @@ public class Row {
 		StringBuilder builder = new StringBuilder();
 		builder.append("{");
 		for (ColumnValue value : valueList) {
-			builder.append(value.toString());
+			builder.append("\"");
+			builder.append(value.getColumnName());
+			builder.append("\"");
+			builder.append(":");
+			builder.append("\"");
+			builder.append(value.getJSONEscapedColumnValue());
+			builder.append("\"");
 			builder.append(",");
 		}
 		builder.replace(builder.length() - 1, builder.length(), "}");

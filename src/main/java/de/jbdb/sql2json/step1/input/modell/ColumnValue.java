@@ -10,6 +10,15 @@ public class ColumnValue {
 		this.value = new Value(valueString);
 	}
 
+	public String getColumnName() {
+		return columnName.toString();
+	}
+
+	public String getJSONEscapedColumnValue() {
+		return value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\t", "\\t")
+				.replace(String.valueOf(0x1e), "\\u001e");
+	}
+
 	@Override
 	public String toString() {
 		return "\"" + columnName.toString() + "\":\"" + value.toString() + "\"";

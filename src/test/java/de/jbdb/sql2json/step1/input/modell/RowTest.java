@@ -221,4 +221,59 @@ public class RowTest {
 				.isEqualTo("{\"" + TEST_COLUMN + "\":\"TEST_VALUE1\",\"" + TEST_COLUMN + "\":\"TEST_VALUE2\"}");
 	}
 
+	@Test
+	public void bug001_twoSingleQuotesMeanOneEscapedSingleQuote() throws Exception {
+		Columns columns = new Columns("cb_nick, cb_time, cb_text");
+		String values = "'Marc', 1089900323, 'Meine Herrn, bis man sich durch alle Seiten durchgewurschtelt hat, wo etwas neues steht, hat man schon fast wieder vergessen, was man zu beginn gelesen hat.\r\nKann man irgendwie ''informiert'' werden, ob etwas gekommen ist, was einen auch wirklich angeht??'";
+
+		Row classUnderTest = new Row(columns, values);
+
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo(
+				"{\"cb_nick\":\"Marc\",\"cb_time\":\"1089900323\",\"cb_text\":\"Meine Herrn, bis man sich durch alle Seiten durchgewurschtelt hat, wo etwas neues steht, hat man schon fast wieder vergessen, was man zu beginn gelesen hat.\r\nKann man irgendwie 'informiert' werden, ob etwas gekommen ist, was einen auch wirklich angeht??\"}");
+	}
+
+	@Test
+	public void bug002_emptyValues() throws Exception {
+		Row classUnderTest = new Row(new Columns(TEST_TWO_COLUMNS), "('TEST_VALUE1', '')");
+
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo("{\"" + TEST_COLUMN + "\":\"TEST_VALUE1\",\"" + TEST_COLUMN + "\":\"\"}");
+	}
+
+	@Test
+	public void bug003_threeStartingSingleQuotes() throws Exception {
+		Columns columns = new Columns("cb_nick, cb_time, cb_text");
+		String values = "'Gero', 1376546676, '''Brütal Legend'', ist das eine türkische Entwicklung? ;-)'";
+
+		Row classUnderTest = new Row(columns, values);
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo(
+				"{\"cb_nick\":\"Gero\",\"cb_time\":\"1376546676\",\"cb_text\":\"'Brütal Legend', ist das eine türkische Entwicklung? ;-)\"}");
+	}
+
+	@Test
+	public void testToJSON_EscapeBackslash() throws Exception {
+		Columns columns = new Columns(TEST_COLUMN);
+		String values = "'\\'";
+
+		Row classUnderTest = new Row(columns, values);
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo("{\"" + TEST_COLUMN + "\":\"\\\\\"" + "}");
+	}
+
+	@Test
+	public void testToJSON_EscapeDoubleBackslashAndQuote() throws Exception {
+		Columns columns = new Columns(TEST_COLUMN);
+		String values = "'\\\\\"'";
+
+		Row classUnderTest = new Row(columns, values);
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo("{\"" + TEST_COLUMN + "\":\"\\\\\\\\\\\"" + "\"}");
+	}
 }

@@ -20,7 +20,7 @@ public interface Sql2JSONTestObjects {
 	String TESTINSERT = "INSERT INTO " + TEST_TABLE + " (" + TEST_TWO_COLUMNS + ") VALUES (" + TEST_VALUE1 + ", "
 			+ TEST_VALUE2 + ");";
 
-	String TESTJSON = "{\"" + TEST_TABLE + "\":[" //
+	String TESTJSON = "{\"" + TEST_TABLE + "\":[\n" //
 			+ "{\"" + TEST_COLUMN + "\":\"" + TEST_VALUE1 + "\",\"" + TEST_COLUMN + "\":\"" + TEST_VALUE2 + "\"}" //
-			+ "]}"; //
+			+ "\n]}"; //
 }

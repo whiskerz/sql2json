@@ -5,17 +5,7 @@ public class Value {
 	private String value;
 
 	public Value(String valueString) {
-		String parameter = valueString.trim();
-
-		if (parameter.startsWith("'")) {
-			parameter = parameter.substring(1);
-		}
-
-		if (parameter.endsWith("'")) {
-			parameter = parameter.substring(0, parameter.length() - 1);
-		}
-
-		this.value = parameter.trim();
+		this.value = valueString.trim();
 	}
 
 	@Override
