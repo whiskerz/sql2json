@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,6 +21,7 @@ import de.jbdb.sql2json.cli.Sql2JSONCommandLine;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Sql2JSONCommandLine.class)
+@ActiveProfiles(Sql2JSONCommandLine.TEST_PROFILE)
 public class Sql2JSONServiceIntegrationTest {
 
 	@Rule
