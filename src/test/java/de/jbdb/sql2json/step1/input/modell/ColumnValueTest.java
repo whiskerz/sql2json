@@ -36,7 +36,7 @@ public class ColumnValueTest {
 
 	@Test
 	public void testToJSON_RecordSeparator() throws Exception {
-		String values = "a" + 0x1e + "b";
+		String values = "a" + (char) 0x1e + "b";
 
 		ColumnValue classUnderTest = new ColumnValue(new ColumnName(TEST_COLUMN), values);
 		String jsonEscapedValue = classUnderTest.getJSONEscapedColumnValue();

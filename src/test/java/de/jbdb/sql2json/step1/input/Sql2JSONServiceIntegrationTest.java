@@ -5,6 +5,7 @@ import static de.jbdb.sql2json.Sql2JSONTestObjects.TESTJSON;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
@@ -45,5 +46,19 @@ public class Sql2JSONServiceIntegrationTest {
 		String resultJson = classUnderTest.convertInsertFilesToJson(tempFolder.getRoot().getAbsolutePath());
 
 		assertThat(resultJson).isEqualTo("[\n" + TESTJSON + "\n]");
+	}
+
+	@Test
+	public void testBug004_UnescapedSpecialCharacter() throws Exception {
+		URL testUrl = this.getClass().getResource("/bug004UnescapedSpecialChar");
+		File testDir = new File(testUrl.getFile());
+
+		String resultJson = classUnderTest.convertInsertFilesToJson(testDir.getAbsolutePath());
+
+		assertThat(resultJson).isEqualTo("[\n" //
+				+ "{\"abforum_posts\":[\n" //
+				+ "{\"post_id\":\"12127\",\"topic_id\":\"370\",\"post_datum\":\"1396472394\",\"post_autor\":\"170\",\"post_text\":\"[topic_titel]Mana Static[/topic_titel][Quote=Street Magic errata v 1.4.1.][b]p. 173 Mana Static[/b]\\\\r\\\\nAdd the following sentence between the \\u001e first and second sentence: \\\"Background count rises at a rate of 1 per Combat Turn up to the Force of the spell.\\\"[/Quote]\\\\r\\\\n\\\\r\\\\nDieser Spruch hat mir einfach keine Ruhe gelassen und da musste ich mal ein bisschen recherchieren. So wird dieser Killerspruch ein bisschen moderater.\",\"post_ip\":\"178.7.146.203\",\"post_Edit\":\"0\"}\n" //
+				+ "]}\n" //
+				+ "]"); //
 	}
 }

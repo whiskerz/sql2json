@@ -256,6 +256,30 @@ public class RowTest {
 	}
 
 	@Test
+	public void bug004_UnescapedSpecialCharSimple() throws Exception {
+		Columns columns = new Columns("`post_text`");
+		String values = "('a" + (char) 0x1e + "b')";
+
+		Row classUnderTest = new Row(columns, values);
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo("{\"post_text\":\"a\\u001eb\"}");
+	}
+
+	@Test
+	public void bug004_UnescapedSpecialChar() throws Exception {
+		Columns columns = new Columns(
+				"`post_id`, `topic_id`, `post_datum`, `post_autor`, `post_text`, `post_ip`, `post_Edit`");
+		String values = "(12127, 370, 1396472394, 170, '[topic_titel]Mana Static[/topic_titel][Quote=Street Magic errata v 1.4.1.][b]p. 173 Mana Static[/b]\r\nAdd the following sentence between the  first and second sentence: \"Background count rises at a rate of 1 per Combat Turn up to the Force of the spell.\"[/Quote]\r\n\r\nDieser Spruch hat mir einfach keine Ruhe gelassen und da musste ich mal ein bisschen recherchieren. So wird dieser Killerspruch ein bisschen moderater.', '178.7.146.203', 0)";
+
+		Row classUnderTest = new Row(columns, values);
+		String jsonString = classUnderTest.toJSON();
+
+		assertThat(jsonString).isEqualTo(
+				"{\"post_id\":\"12127\",\"topic_id\":\"370\",\"post_datum\":\"1396472394\",\"post_autor\":\"170\",\"post_text\":\"[topic_titel]Mana Static[/topic_titel][Quote=Street Magic errata v 1.4.1.][b]p. 173 Mana Static[/b]\r\nAdd the following sentence between the \\u001e first and second sentence: \\\"Background count rises at a rate of 1 per Combat Turn up to the Force of the spell.\\\"[/Quote]\r\n\r\nDieser Spruch hat mir einfach keine Ruhe gelassen und da musste ich mal ein bisschen recherchieren. So wird dieser Killerspruch ein bisschen moderater.\",\"post_ip\":\"178.7.146.203\",\"post_Edit\":\"0\"}");
+	}
+
+	@Test
 	public void testToJSON_EscapeBackslash() throws Exception {
 		Columns columns = new Columns(TEST_COLUMN);
 		String values = "'\\'";

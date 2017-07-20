@@ -16,7 +16,7 @@ public class ColumnValue {
 
 	public String getJSONEscapedColumnValue() {
 		return value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\t", "\\t")
-				.replace(String.valueOf(0x1e), "\\u001e");
+				.replace(String.valueOf((char) 0x1e), "\\u001e");
 	}
 
 	@Override

@@ -101,6 +101,12 @@ public class Row {
 							"Could not parse input. It seems to be malformed and is missing a closing quote, I don't know how to interpret its values without that. Here is your input: "
 									+ values);
 				}
+
+				// TODO Introduce logging and debug log this
+				// char currentChar = parameter.charAt(0);
+				// int code = currentChar;
+				// System.out.println(currentChar + ":\\u" + code);
+
 				collector.append(parameter.charAt(0));
 				parameter = parameter.substring(1);
 				break;
